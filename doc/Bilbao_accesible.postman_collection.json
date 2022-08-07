@@ -1,0 +1,59 @@
+{
+  "info": {
+    "_postman_id": "fbeb79b3-87b0-46f8-bdcd-1e2d617aeefe",
+    "name": "Bilbao_accesible",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21995780"
+  },
+  "item": [
+    {
+      "name": "Places",
+      "item": [
+        {
+          "name": "listPlaces",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:3000/places",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3000",
+              "path": ["places"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getPlace",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "newPlace",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "newUser",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

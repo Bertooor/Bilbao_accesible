@@ -8,4 +8,4 @@ const newUser = (req, res, next) => {
   });
 };
 
-module.exports = { newUser };
+module.exports = newUser;

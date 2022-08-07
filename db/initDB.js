@@ -1,7 +1,7 @@
 'use strict';
 
 require('dotenv').config();
-const { getDB } = require('./db');
+const getDB = require('./db');
 
 async function main() {
   let connection;
@@ -40,7 +40,9 @@ async function main() {
         description TEXT NOT NULL,
         city VARCHAR(100) NOT NULL,
         distric VARCHAR(100) NOT NULL,
-        problem_solved BOOLEAN DEFAULT false
+        problem_solved BOOLEAN DEFAULT false,
+        user_id INT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id)
       )
     `);
 
@@ -48,7 +50,6 @@ async function main() {
       CREATE TABLE places_photos (
         id INT PRIMARY KEY AUTO_INCREMENT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        uploadDate DATETIME NOT NULL,
         photo VARCHAR(100) NOT NULL,
         place_id INT NOT NULL,
         FOREIGN KEY(place_id) REFERENCES places(id)

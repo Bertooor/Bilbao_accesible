@@ -6,20 +6,29 @@ const express = require('express');
 
 const morgan = require('morgan');
 
+const fileUpload = require('express-fileupload');
+
 const { PORT } = process.env;
 
 const app = express();
 
-const { newPlace, listPlaces, getPlace } = require('./controllers/places');
-const { newUser } = require('./controllers/users');
+const {
+  newPlace,
+  listPlaces,
+  getPlace,
+} = require('./controllers/places/index');
+const newUser = require('./controllers/users/index');
+const isUser = require('./middlewares/isUser');
 
 app.use(morgan('dev'));
 
 app.use(express.json());
 
+app.use(fileUpload());
+
 app.post('/users', newUser);
 
-app.post('/places', newPlace);
+app.post('/places', isUser, newPlace);
 app.get('/places', listPlaces);
 app.get('/places/:id', getPlace);
 
