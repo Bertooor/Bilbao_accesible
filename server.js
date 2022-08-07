@@ -6,9 +6,11 @@ const express = require('express');
 
 const morgan = require('morgan');
 
+const path = require('path');
+
 const fileUpload = require('express-fileupload');
 
-const { PORT } = process.env;
+const { PORT, UPLOAD_DIRECTORY_ADMIN } = process.env;
 
 const app = express();
 
@@ -16,13 +18,16 @@ const {
   newPlace,
   listPlaces,
   getPlace,
+  editPlace,
 } = require('./controllers/places/index');
 const newUser = require('./controllers/users/index');
-const isUser = require('./middlewares/isUser');
+const { canEdit, isUser, placeExist } = require('./middlewares');
 
 app.use(morgan('dev'));
 
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, UPLOAD_DIRECTORY_ADMIN)));
 
 app.use(fileUpload());
 
@@ -31,6 +36,7 @@ app.post('/users', newUser);
 app.post('/places', isUser, newPlace);
 app.get('/places', listPlaces);
 app.get('/places/:id', getPlace);
+app.put('/places/:id', isUser, placeExist, canEdit, editPlace);
 
 app.use((req, res) => {
   res.status(404).send({
