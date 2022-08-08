@@ -19,4 +19,9 @@ async function savePhoto(dataPhoto) {
   return imageAdName;
 }
 
-module.exports = savePhoto;
+async function deletePhoto(photo) {
+  const photoPath = path.join(photosAdminDir, photo);
+  await fs.unlink(photoPath);
+}
+
+module.exports = { savePhoto, deletePhoto };

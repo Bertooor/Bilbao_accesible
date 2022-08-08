@@ -9,11 +9,13 @@ const getPlace = async (req, res, next) => {
 
     const { id } = req.params;
 
+    console.log('id', id);
+
     const [result] = await connection.query(
       `
       SELECT id, created_at, title, description, city, distric
       FROM places
-      WHERE places.id = ?
+      WHERE id = ?
     `,
       [id]
     );
@@ -26,12 +28,23 @@ const getPlace = async (req, res, next) => {
     `,
       [id]
     );
+
+    const [complaints] = await connection.query(
+      `
+      SELECT complaint
+      FROM places_complaints
+      WHERE id = ?
+    `,
+      [id]
+    );
+
     res.send({
       status: 'ok',
       message: 'Detalle del lugar',
       data: {
         ...result[0],
         photos,
+        complaints,
       },
     });
   } catch (error) {

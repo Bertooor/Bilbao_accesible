@@ -39,7 +39,7 @@ const listPlaces = async (req, res, next) => {
       );
     }
 
-    let placesWithPhotos;
+    let placesWithPhotos = [];
 
     if (places.length > 0) {
       const arrayIds = places.map((place) => {

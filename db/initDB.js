@@ -63,7 +63,7 @@ async function main() {
         complaint TINYINT NOT NULL, 
         place_id INT NOT NULL,
         FOREIGN KEY(place_id) REFERENCES places(id),
-        CONSTRAINT places_complaints_CK1 CHECK (complaint IN(0,1)),
+        CONSTRAINT places_complaints_CK1 CHECK (complaint=1),
         user_id INT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
         -- CONSTRAINT uc_user_place UNIQUE (user_id , place_id)

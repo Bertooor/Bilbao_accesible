@@ -15,10 +15,12 @@ const { PORT, UPLOAD_DIRECTORY_ADMIN } = process.env;
 const app = express();
 
 const {
+  complaintPlace,
   newPlace,
   listPlaces,
   getPlace,
   editPlace,
+  deletePlace,
 } = require('./controllers/places/index');
 const newUser = require('./controllers/users/index');
 const { canEdit, isUser, placeExist } = require('./middlewares');
@@ -37,6 +39,8 @@ app.post('/places', isUser, newPlace);
 app.get('/places', listPlaces);
 app.get('/places/:id', getPlace);
 app.put('/places/:id', isUser, placeExist, canEdit, editPlace);
+app.post('/places/:id/complaints', isUser, placeExist, complaintPlace);
+app.delete('/places/:id', isUser, placeExist, canEdit, deletePlace);
 
 app.use((req, res) => {
   res.status(404).send({
