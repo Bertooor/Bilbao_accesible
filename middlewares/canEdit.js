@@ -1,6 +1,7 @@
 'use strict';
 
 const getDB = require('../db/db');
+const { generateError } = require('../helpers');
 
 const canEdit = async (req, res, next) => {
   let connection;
@@ -17,7 +18,16 @@ const canEdit = async (req, res, next) => {
     `,
       [id]
     );
+
     console.log('Id de usuario que creó el place:', current[0].user_id);
+
+    if (
+      req.userAuth.id !== current[0].user_id &&
+      req.userAuth.role !== 'admin'
+    ) {
+      generateError('No tienes los permisos para editar el lugar', 401);
+    }
+
     next();
   } catch (error) {
     next(error);

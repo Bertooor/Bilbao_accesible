@@ -3,8 +3,9 @@
 const getDB = require('../db/db');
 const { generateError } = require('../helpers');
 
-const placeExist = async (req, res, next) => {
+const userExist = async (req, res, next) => {
   let connection;
+
   try {
     connection = await getDB();
 
@@ -12,21 +13,23 @@ const placeExist = async (req, res, next) => {
 
     const [result] = await connection.query(
       `
-      SELECT id 
-      FROM places 
-      WHERE id = ?
+        SELECT id
+        FROM users
+        WHERE id = ?
     `,
       [id]
     );
 
-    console.log(result, id);
-
     if (result.length === 0) {
-      generateError('Lugar no encontrado', 404);
+      generateError('Usuario no encontrado', 404);
     }
+
     next();
   } catch (error) {
     next(error);
+  } finally {
+    if (connection) connection.release();
   }
 };
-module.exports = placeExist;
+
+module.exports = userExist;

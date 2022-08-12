@@ -9,8 +9,6 @@ const getPlace = async (req, res, next) => {
 
     const { id } = req.params;
 
-    console.log('id', id);
-
     const [result] = await connection.query(
       `
       SELECT id, created_at, title, description, city, distric

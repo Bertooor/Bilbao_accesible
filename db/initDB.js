@@ -49,7 +49,7 @@ async function main() {
     await connection.query(`
       CREATE TABLE places_photos (
         id INT PRIMARY KEY AUTO_INCREMENT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        uploadDate DATETIME DEFAULT CURRENT_TIMESTAMP,
         photo VARCHAR(100) NOT NULL,
         place_id INT NOT NULL,
         FOREIGN KEY(place_id) REFERENCES places(id)
@@ -80,18 +80,6 @@ async function main() {
             "Alberto Leandro",
             true,
             "admin"
-        )
-    `);
-
-    console.log('Creo usuario de prueba...');
-    await connection.query(`
-        INSERT INTO users(created_at, email, password, name, active)
-        VALUES(
-            CURRENT_TIMESTAMP,
-            'albertoleandrocorral@gmail.com',
-            SHA2("${process.env.USER_PASSWORD}", 512),
-            "Berto Leandro",
-            true
         )
     `);
   } catch (error) {

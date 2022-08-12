@@ -1,6 +1,7 @@
 'use strict';
 
 const getDB = require('../../db/db');
+const { generateError } = require('../../helpers');
 
 const editPlace = async (req, res, next) => {
   let connection;
@@ -13,9 +14,7 @@ const editPlace = async (req, res, next) => {
     const { title, city, distric, description } = req.body;
 
     if (!title || !description || !city || !distric) {
-      const error = new Error('Te falta algún campo obligatorio por rellenar');
-      error.httpStatus = 400;
-      throw error;
+      generateError('Te falta algún campo obligatorio por rellenar', 400);
     }
 
     await connection.query(
