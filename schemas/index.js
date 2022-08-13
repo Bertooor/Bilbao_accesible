@@ -4,6 +4,7 @@ const Joi = require('joi');
 
 const registrationSchema = Joi.object().keys({
   email: Joi.string().required().email().max(100),
+  avatar: Joi.string().max(50),
   password: Joi.string()
     .required()
     .min(6)

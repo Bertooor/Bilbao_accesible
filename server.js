@@ -30,6 +30,8 @@ const {
   loginUser,
   getUser,
   editUserPwd,
+  deleteUser,
+  editUser,
 } = require('./controllers/users/index');
 const { canEdit, isUser, placeExist, userExist } = require('./middlewares');
 
@@ -46,6 +48,8 @@ app.get('/users/validate/:registrationCode', validateUser);
 app.post('/users/login', loginUser);
 app.get('/users/:id', isUser, userExist, getUser);
 app.put('/users/password', isUser, editUserPwd);
+app.delete('/users/:id', userExist, isUser, deleteUser);
+app.put('/users/:id', userExist, isUser, editUser);
 
 app.post('/places', isUser, newPlace);
 app.get('/places', listPlaces);

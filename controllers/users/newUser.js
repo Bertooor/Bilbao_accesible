@@ -17,7 +17,7 @@ const newUser = async (req, res, next) => {
 
     await validate(registrationSchema, req.body);
 
-    const { email, password } = req.body;
+    const { email, password, avatar } = req.body;
 
     const [existingUser] = await connection.query(
       `
@@ -47,10 +47,10 @@ const newUser = async (req, res, next) => {
 
     await connection.query(
       `
-      INSERT INTO users (created_at, email, password, registrationCode)
-      VALUES (CURRENT_TIMESTAMP, ?, SHA2(?, 512), ?)
+      INSERT INTO users (created_at, avatar, email, password, registrationCode)
+      VALUES (CURRENT_TIMESTAMP, ?, ?, SHA2(?, 512), ?)
     `,
-      [email, password, registrationCode]
+      [avatar, email, password, registrationCode]
     );
 
     res.status(201).send({
