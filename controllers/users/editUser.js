@@ -24,31 +24,31 @@ const editUser = async (req, res, next) => {
 
     const [currentUser] = await connection.query(
       `
-            SELECT email
-            FROM users
-            WHERE id = ?
-        `,
+        SELECT email
+        FROM users
+        WHERE id = ?
+      `,
       [id]
     );
 
-    if (req.files.avatar) {
+    if (req.files && req.files.avatar) {
       const userAvatar = await savePhoto(req.files.avatar);
       await connection.query(
         `
-                UPDATE users
-                SET avatar = ?
-                WHERE id = ?
-            `,
+          UPDATE users
+          SET avatar = ?
+          WHERE id = ?
+        `,
         [userAvatar, id]
       );
     }
 
-    if (email !== currentUser[0].email) {
+    if (email && email !== currentUser[0].email) {
       const [existingEmail] = await connection.query(
         `
-            SELECT id
-            FROM users
-         WHERE email = ?
+          SELECT id
+          FROM users
+          WHERE email = ?
         `,
         [email]
       );
@@ -60,9 +60,9 @@ const editUser = async (req, res, next) => {
       const registrationCode = generateRandomString(40);
 
       const emailBody = `
-            Acabas de modificar tu email en Bilbao_accesible.
-            Pulsa en este link para validar tu nuevo email: ${process.env.PUBLIC_HOST}/users/validate/${registrationCode}
-        `;
+        Acabas de modificar tu email en Bilbao_accesible.
+        Pulsa en este link para validar tu nuevo email: ${process.env.PUBLIC_HOST}/users/validate/${registrationCode}
+      `;
 
       await sendEmail({
         to: email,
@@ -72,9 +72,9 @@ const editUser = async (req, res, next) => {
 
       await connection.query(
         `
-            UPDATE users
-            SET name = ?, email = ?, lastAuthUpdate = ?, active = 0, registrationCode = ? 
-            WHERE id = ?
+          UPDATE users
+          SET name = ?, email = ?, lastAuthUpdate = ?, active = 0, registrationCode = ? 
+          WHERE id = ?
         `,
         [name, email, new Date(), registrationCode, id]
       );
@@ -87,9 +87,9 @@ const editUser = async (req, res, next) => {
     } else {
       await connection.query(
         `
-            UPDATE users
-            SET name = ?
-            WHERE id = ?
+          UPDATE users
+          SET name = ?
+          WHERE id = ?
         `,
         [name, id]
       );

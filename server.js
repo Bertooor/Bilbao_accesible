@@ -32,6 +32,8 @@ const {
   editUserPwd,
   deleteUser,
   editUser,
+  recoverUserPassword,
+  resetUserPassword,
 } = require('./controllers/users/index');
 const { canEdit, isUser, placeExist, userExist } = require('./middlewares');
 
@@ -50,6 +52,8 @@ app.get('/users/:id', isUser, userExist, getUser);
 app.put('/users/password', isUser, editUserPwd);
 app.delete('/users/:id', userExist, isUser, deleteUser);
 app.put('/users/:id', userExist, isUser, editUser);
+app.post('/users/recover-password', recoverUserPassword);
+app.post('/users/reset-password', resetUserPassword);
 
 app.post('/places', isUser, newPlace);
 app.get('/places', listPlaces);
