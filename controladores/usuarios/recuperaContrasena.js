@@ -2,12 +2,12 @@
 
 const getDB = require('../../db/db');
 const {
-  generateError,
-  generateRandomString,
-  sendEmail,
+  generarError,
+  generarCodigoRandom,
+  enviarMail,
 } = require('../../helpers');
 
-const recoverUserPassword = async (req, res, next) => {
+const recuperaContrasena = async (req, res, next) => {
   let connection;
 
   try {
@@ -16,10 +16,10 @@ const recoverUserPassword = async (req, res, next) => {
     const { email } = req.body;
 
     if (!email) {
-      generateError('Faltan campos', 400);
+      generarError('Faltan campos', 400);
     }
 
-    const [currentEmail] = await connection.query(
+    const [confirmaEmail] = await connection.query(
       `
             SELECT id
             FROM users
@@ -28,11 +28,11 @@ const recoverUserPassword = async (req, res, next) => {
       [email]
     );
 
-    if (currentEmail.length === 0) {
-      generateError('No hay ningún usuario registrado con este email');
+    if (confirmaEmail.length === 0) {
+      generarError('No hay ningún usuario registrado con este email');
     }
 
-    const recoverCode = generateRandomString(40);
+    const recoverCode = generarCodigoRandom(40);
 
     const emailBody = `
             Se solicitó un cambio de contraseña para el usuario registrado con este email en Bilbao_accesible.
@@ -53,7 +53,7 @@ const recoverUserPassword = async (req, res, next) => {
       [recoverCode, email]
     );
 
-    await sendEmail({
+    await enviarMail({
       to: email,
       subject: `Cambio de contraseña en Bilbao_accesible.`,
       body: emailBody,
@@ -70,4 +70,4 @@ const recoverUserPassword = async (req, res, next) => {
   }
 };
 
-module.exports = recoverUserPassword;
+module.exports = recuperaContrasena;

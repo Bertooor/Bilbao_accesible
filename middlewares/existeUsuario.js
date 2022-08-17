@@ -1,9 +1,9 @@
 'use strict';
 
 const getDB = require('../db/db');
-const { generateError } = require('../helpers');
+const { generarError } = require('../helpers');
 
-const userExist = async (req, res, next) => {
+const existeUsuario = async (req, res, next) => {
   let connection;
 
   try {
@@ -11,7 +11,7 @@ const userExist = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const [result] = await connection.query(
+    const [comprobarId] = await connection.query(
       `
         SELECT id
         FROM users
@@ -20,8 +20,8 @@ const userExist = async (req, res, next) => {
       [id]
     );
 
-    if (result.length === 0) {
-      generateError('Usuario no encontrado', 404);
+    if (comprobarId.length === 0) {
+      generarError('Usuario no encontrado', 404);
     }
 
     next();
@@ -32,4 +32,4 @@ const userExist = async (req, res, next) => {
   }
 };
 
-module.exports = userExist;
+module.exports = existeUsuario;

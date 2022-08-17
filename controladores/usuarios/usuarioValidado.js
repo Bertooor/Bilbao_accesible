@@ -1,9 +1,9 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { generateError } = require('../../helpers');
+const { generarError } = require('../../helpers');
 
-const validateUser = async (req, res, next) => {
+const usuarioValidado = async (req, res, next) => {
   let connection;
 
   try {
@@ -21,7 +21,7 @@ const validateUser = async (req, res, next) => {
     );
 
     if (user.length === 0) {
-      generateError('Ningún usuario con este código de validación', 404);
+      generarError('Ningún usuario con este código de validación', 404);
     }
 
     await connection.query(
@@ -44,4 +44,4 @@ const validateUser = async (req, res, next) => {
   }
 };
 
-module.exports = validateUser;
+module.exports = usuarioValidado;

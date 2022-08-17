@@ -12,6 +12,7 @@ async function main() {
     await connection.query(`DROP TABLE IF EXISTS places_complaints;`);
     await connection.query(`DROP TABLE IF EXISTS places_photos;`);
     await connection.query(`DROP TABLE IF EXISTS places;`);
+    await connection.query(`DROP TABLE IF EXISTS users_avatar`);
     await connection.query(`DROP TABLE IF EXISTS users;`);
 
     console.log('Creando las tablas...');
@@ -29,6 +30,16 @@ async function main() {
         deleted BOOLEAN DEFAULT false,
         lastAuthUpdate DATETIME,
         recoverCode VARCHAR(100)
+      )
+    `);
+
+    await connection.query(`
+      CREATE TABLE users_avatar (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        uploadDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+        photo VARCHAR(100) UNIQUE NOT NULL,
+        user_id INT NOT NULL,
+        FOREIGN KEY(user_id) REFERENCES users(id)
       )
     `);
 

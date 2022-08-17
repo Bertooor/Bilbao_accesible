@@ -9,26 +9,26 @@ const sgEmail = require('@sendgrid/mail');
 
 sgEmail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const { UPLOAD_DIRECTORY_ADMIN } = process.env;
-const photosAdminDir = path.join(__dirname, UPLOAD_DIRECTORY_ADMIN);
+const { DIRECTORIO_IMAGENES } = process.env;
+const fotosDir = path.join(__dirname, DIRECTORIO_IMAGENES);
 
-async function savePhoto(dataPhoto) {
-  await fs.access(photosAdminDir);
+async function guardarFoto(dataFoto) {
+  await fs.access(fotosDir);
 
-  const imageAd = sharp(dataPhoto.data);
+  const imagen = sharp(dataFoto.data);
 
-  const imageAdName = `upload_${uuid.v4()}_${dataPhoto.name}`;
+  const nombreImagen = `upload_${uuid.v4()}_${dataFoto.name}`;
 
-  await imageAd.toFile(path.join(photosAdminDir, imageAdName));
-  return imageAdName;
+  await imagen.toFile(path.join(fotosDir, nombreImagen));
+  return nombreImagen;
 }
 
-async function deletePhoto(photo) {
-  const photoPath = path.join(photosAdminDir, photo);
+async function borrarFoto(foto) {
+  const photoPath = path.join(fotosDir, foto);
   await fs.unlink(photoPath);
 }
 
-async function validate(schema, data) {
+async function validar(schema, data) {
   try {
     await schema.validateAsync(data);
   } catch (error) {
@@ -37,11 +37,11 @@ async function validate(schema, data) {
   }
 }
 
-function generateRandomString(byteString) {
+function generarCodigoRandom(byteString) {
   return crypto.randomBytes(byteString).toString('hex');
 }
 
-async function sendEmail({ to, subject, body }) {
+async function enviarMail({ to, subject, body }) {
   try {
     const msg = {
       to,
@@ -61,17 +61,17 @@ async function sendEmail({ to, subject, body }) {
   }
 }
 
-function generateError(msg, statusCode) {
+function generarError(msg, statusCode) {
   const error = new Error(msg);
   error.httpStatus = statusCode;
   throw error;
 }
 
 module.exports = {
-  savePhoto,
-  deletePhoto,
-  validate,
-  generateRandomString,
-  sendEmail,
-  generateError,
+  guardarFoto,
+  borrarFoto,
+  validar,
+  generarCodigoRandom,
+  enviarMail,
+  generarError,
 };

@@ -1,9 +1,9 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { generateError } = require('../../helpers');
+const { generarError } = require('../../helpers');
 
-const complaintPlace = async (req, res, next) => {
+const denunciaLugar = async (req, res, next) => {
   let connection;
 
   try {
@@ -13,7 +13,7 @@ const complaintPlace = async (req, res, next) => {
     const { complaint } = req.body;
 
     if (complaint !== 1) {
-      generateError('La denuncia se hace con el "1"', 400);
+      generarError('La denuncia se hace con el "1"', 400);
     }
 
     const [existingComplaint] = await connection.query(
@@ -26,7 +26,7 @@ const complaintPlace = async (req, res, next) => {
     );
 
     if (existingComplaint.length > 0) {
-      generateError('Ya denunciaste este problema', 400);
+      generarError('Ya denunciaste este problema', 400);
     }
 
     await connection.query(
@@ -59,4 +59,4 @@ const complaintPlace = async (req, res, next) => {
   }
 };
 
-module.exports = complaintPlace;
+module.exports = denunciaLugar;

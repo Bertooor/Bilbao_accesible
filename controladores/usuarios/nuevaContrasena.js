@@ -1,21 +1,21 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { generateError } = require('../../helpers');
+const { generarError } = require('../../helpers');
 
-const resetUserPassword = async (req, res, next) => {
+const nuevaContrasena = async (req, res, next) => {
   let connection;
 
   try {
     connection = await getDB();
 
-    const { recoverCode, newPassword } = req.body;
+    const { recoverCode, nuevaContrasena } = req.body;
 
-    if (!recoverCode || !newPassword || newPassword.length < 6) {
-      generateError('Faltan campos por completar', 400);
+    if (!recoverCode || !nuevaContrasena) {
+      generarError('Faltan campos por completar', 400);
     }
 
-    const [user] = await connection.query(
+    const [comprobacionUsuario] = await connection.query(
       `
             SELECT id
             FROM users
@@ -24,8 +24,8 @@ const resetUserPassword = async (req, res, next) => {
       [recoverCode]
     );
 
-    if (user.length === 0) {
-      generateError('Código de recuperación incorrecto.', 404);
+    if (comprobacionUsuario.length === 0) {
+      generarError('Código de recuperación incorrecto.', 404);
     }
 
     await connection.query(
@@ -34,7 +34,7 @@ const resetUserPassword = async (req, res, next) => {
             SET password = SHA2(?, 512), lastAuthUpdate = ?, recoverCode = NULL
             WHERE id = ?
         `,
-      [newPassword, new Date(), user[0].id]
+      [nuevaContrasena, new Date(), comprobacionUsuario[0].id]
     );
 
     res.send({
@@ -48,4 +48,4 @@ const resetUserPassword = async (req, res, next) => {
   }
 };
 
-module.exports = resetUserPassword;
+module.exports = nuevaContrasena;

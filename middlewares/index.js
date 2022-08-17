@@ -1,8 +1,13 @@
 'use strict';
 
-const canEdit = require('./canEdit');
-const isUser = require('./isUser');
-const placeExist = require('./placeExist');
-const userExist = require('./userExist');
+const puedeEditarLugar = require('./puedeEditarLugar');
+const usuarioAutorizado = require('./usuarioAutorizado');
+const existeLugar = require('./existeLugar');
+const existeUsuario = require('./existeUsuario');
 
-module.exports = { canEdit, isUser, placeExist, userExist };
+module.exports = {
+  puedeEditarLugar,
+  usuarioAutorizado,
+  existeLugar,
+  existeUsuario,
+};

@@ -2,13 +2,12 @@
 
 const getDB = require('../../db/db');
 const {
-  generateError,
-  savePhoto,
-  generateRandomString,
-  sendEmail,
+  generarError,
+  generarCodigoRandom,
+  enviarMail,
 } = require('../../helpers');
 
-const editUser = async (req, res, next) => {
+const editaUsuario = async (req, res, next) => {
   let connection;
 
   try {
@@ -16,13 +15,11 @@ const editUser = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const { name, email } = req.body;
-
     if (req.userAuth.id !== Number(id) && req.userAuth.role !== 'admin') {
-      generateError('No tienes permisos para editar este usuario', 403);
+      generarError('No tienes permisos para editar este usuario', 403);
     }
 
-    const [currentUser] = await connection.query(
+    const [infoUsuario] = await connection.query(
       `
         SELECT email
         FROM users
@@ -31,20 +28,10 @@ const editUser = async (req, res, next) => {
       [id]
     );
 
-    if (req.files && req.files.avatar) {
-      const userAvatar = await savePhoto(req.files.avatar);
-      await connection.query(
-        `
-          UPDATE users
-          SET avatar = ?
-          WHERE id = ?
-        `,
-        [userAvatar, id]
-      );
-    }
+    const { name, email, avatar } = req.body;
 
-    if (email && email !== currentUser[0].email) {
-      const [existingEmail] = await connection.query(
+    if (email !== infoUsuario[0].email) {
+      const [existeMail] = await connection.query(
         `
           SELECT id
           FROM users
@@ -53,18 +40,18 @@ const editUser = async (req, res, next) => {
         [email]
       );
 
-      if (existingEmail.length > 0) {
-        generateError('Ya existe un usuario con el email proporcionado', 409);
+      if (existeMail.length > 0) {
+        generarError('Ya existe un usuario con el email proporcionado', 409);
       }
 
-      const registrationCode = generateRandomString(40);
+      const registrationCode = generarCodigoRandom(30);
 
       const emailBody = `
         Acabas de modificar tu email en Bilbao_accesible.
-        Pulsa en este link para validar tu nuevo email: ${process.env.PUBLIC_HOST}/users/validate/${registrationCode}
+        Pulsa en este link para validar tu nuevo email: ${process.env.PUBLIC_HOST}/usuarios/validar/${registrationCode}
       `;
 
-      await sendEmail({
+      await enviarMail({
         to: email,
         subject: 'Confirma tu nuevo email',
         body: emailBody,
@@ -73,10 +60,10 @@ const editUser = async (req, res, next) => {
       await connection.query(
         `
           UPDATE users
-          SET name = ?, email = ?, lastAuthUpdate = ?, active = 0, registrationCode = ? 
+          SET name = ?, avatar = ?, email = ?, lastAuthUpdate = ?, active = 0, registrationCode = ? 
           WHERE id = ?
         `,
-        [name, email, new Date(), registrationCode, id]
+        [name, avatar, email, new Date(), registrationCode, id]
       );
 
       res.send({
@@ -88,10 +75,10 @@ const editUser = async (req, res, next) => {
       await connection.query(
         `
           UPDATE users
-          SET name = ?
+          SET name = ?, avatar = ?, lastAuthUpdate = ?
           WHERE id = ?
         `,
-        [name, id]
+        [name, avatar, new Date(), id]
       );
 
       res.send({
@@ -106,4 +93,4 @@ const editUser = async (req, res, next) => {
   }
 };
 
-module.exports = editUser;
+module.exports = editaUsuario;

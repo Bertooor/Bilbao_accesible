@@ -1,9 +1,9 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { generateError } = require('../../helpers');
+const { generarError } = require('../../helpers');
 
-const deleteUser = async (req, res, next) => {
+const borraUsuario = async (req, res, next) => {
   let connection;
 
   try {
@@ -12,11 +12,11 @@ const deleteUser = async (req, res, next) => {
     const { id } = req.params;
 
     if (Number(id) === 1) {
-      generateError('El administrador principal no se puede eliminar', 403);
+      generarError('El administrador principal no se puede eliminar', 403);
     }
 
     if (req.userAuth.id !== Number(id) && req.userAuth.role !== 'admin') {
-      generateError('No tienes permisos para eliminar a este usuario', 401);
+      generarError('No tienes permisos para eliminar a este usuario', 401);
     }
 
     await connection.query(
@@ -39,4 +39,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = deleteUser;
+module.exports = borraUsuario;

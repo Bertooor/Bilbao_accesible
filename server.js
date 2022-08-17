@@ -10,70 +10,95 @@ const path = require('path');
 
 const fileUpload = require('express-fileupload');
 
-const { PORT, UPLOAD_DIRECTORY_ADMIN } = process.env;
+const { PORT, DIRECTORIO_IMAGENES } = process.env;
 
 const app = express();
 
 const {
-  complaintPlace,
-  newPlace,
-  listPlaces,
-  getPlace,
-  editPlace,
-  deletePlace,
-  addPlacePhoto,
-  deletePlacePhoto,
-} = require('./controllers/places/index');
+  nuevoLugar,
+  lugares,
+  lugar,
+  editaLugar,
+  borraLugar,
+  fotoLugar,
+  borraFotoLugar,
+  denunciaLugar,
+} = require('./controladores/lugares/index');
 const {
-  newUser,
-  validateUser,
-  loginUser,
-  getUser,
-  editUserPwd,
-  deleteUser,
-  editUser,
-  recoverUserPassword,
-  resetUserPassword,
-} = require('./controllers/users/index');
-const { canEdit, isUser, placeExist, userExist } = require('./middlewares');
+  nuevoUsuario,
+  usuarioValidado,
+  loginUsuario,
+  usuarioInfo,
+  editaContrasenaUsuario,
+  borraUsuario,
+  editaUsuario,
+  recuperaContrasena,
+  nuevaContrasena,
+  fotoAvatar,
+} = require('./controladores/usuarios/index');
+const {
+  puedeEditarLugar,
+  usuarioAutorizado,
+  existeLugar,
+  existeUsuario,
+} = require('./middlewares');
 
 app.use(morgan('dev'));
 
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, UPLOAD_DIRECTORY_ADMIN)));
+app.use(express.static(path.join(__dirname, DIRECTORIO_IMAGENES)));
 
 app.use(fileUpload());
 
-app.post('/users', newUser);
-app.get('/users/validate/:registrationCode', validateUser);
-app.post('/users/login', loginUser);
-app.get('/users/:id', isUser, userExist, getUser);
-app.put('/users/password', isUser, editUserPwd);
-app.delete('/users/:id', userExist, isUser, deleteUser);
-app.put('/users/:id', userExist, isUser, editUser);
-app.post('/users/recover-password', recoverUserPassword);
-app.post('/users/reset-password', resetUserPassword);
+app.post('/usuarios', nuevoUsuario);
+app.get('/usuarios/validar/:registrationCode', usuarioValidado);
+app.post('/usuarios/login', loginUsuario);
+app.get('/usuarios/:id', existeUsuario, usuarioAutorizado, usuarioInfo);
+app.put('/usuarios/contrasena', usuarioAutorizado, editaContrasenaUsuario);
+app.delete('/usuarios/:id', existeUsuario, usuarioAutorizado, borraUsuario);
+app.put('/usuarios/:id', existeUsuario, usuarioAutorizado, editaUsuario);
+app.post('/usuarios/recuperaContrasena', recuperaContrasena);
+app.post('/usuarios/nuevaContrasena', nuevaContrasena);
+app.post('/usuarios/:id/avatar', usuarioAutorizado, fotoAvatar);
 
-app.post('/places', isUser, newPlace);
-app.get('/places', listPlaces);
-app.get('/places/:id', getPlace);
-app.put('/places/:id', isUser, placeExist, canEdit, editPlace);
-app.post('/places/:id/', isUser, placeExist, complaintPlace);
-app.delete('/places/:id', isUser, placeExist, canEdit, deletePlace);
-app.post('/places/:id/photos', isUser, placeExist, canEdit, addPlacePhoto);
+app.post('/lugares', usuarioAutorizado, nuevoLugar);
+app.get('/lugares', lugares);
+app.get('/lugares/:id', lugar);
+app.put(
+  '/lugares/:id',
+  usuarioAutorizado,
+  existeLugar,
+  puedeEditarLugar,
+  editaLugar
+);
+app.post('/lugares/:id/', usuarioAutorizado, existeLugar, denunciaLugar);
 app.delete(
-  '/places/:id/photos/:photoID',
-  isUser,
-  placeExist,
-  canEdit,
-  deletePlacePhoto
+  '/lugares/:id',
+  usuarioAutorizado,
+  existeLugar,
+  puedeEditarLugar,
+  borraLugar
+);
+app.post(
+  '/lugares/:id/photos',
+  usuarioAutorizado,
+  existeLugar,
+  puedeEditarLugar,
+  fotoLugar
+);
+app.delete(
+  '/lugares/:id/photos/:photoID',
+  usuarioAutorizado,
+  existeLugar,
+  puedeEditarLugar,
+  borraFotoLugar
 );
 
 app.use((req, res) => {
   res.status(404).send({
     status: 'error',
-    message: 'Not found',
+    message: 'No encontrado',
   });
 });
 

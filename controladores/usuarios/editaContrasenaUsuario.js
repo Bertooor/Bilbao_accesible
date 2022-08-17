@@ -1,27 +1,27 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { generateError } = require('../../helpers');
+const { generarError } = require('../../helpers');
 
-const editUserPwd = async (req, res, next) => {
+const editaContrasenaUsuario = async (req, res, next) => {
   let connection;
 
   try {
     connection = await getDB();
 
-    const { oldPwd, newPwd } = req.body;
+    const { antiguaContrasena, nuevaContrasena } = req.body;
 
-    const [user] = await connection.query(
+    const [contrasenaUsuario] = await connection.query(
       `
         SELECT id
         FROM users
         WHERE id = ? AND password = SHA2(?, 512)
     `,
-      [req.userAuth.id, oldPwd]
+      [req.userAuth.id, antiguaContrasena]
     );
 
-    if (user.length === 0) {
-      generateError('Antigua contraseña, no correcta', 401);
+    if (contrasenaUsuario.length === 0) {
+      generarError('Antigua contraseña, no correcta', 401);
     }
 
     await connection.query(
@@ -30,7 +30,7 @@ const editUserPwd = async (req, res, next) => {
         SET password = SHA2(?, 512), lastAuthUpdate = ?
         WHERE id = ?
     `,
-      [newPwd, new Date(), req.userAuth.id]
+      [nuevaContrasena, new Date(), req.userAuth.id]
     );
 
     res.send({
@@ -44,4 +44,4 @@ const editUserPwd = async (req, res, next) => {
   }
 };
 
-module.exports = editUserPwd;
+module.exports = editaContrasenaUsuario;

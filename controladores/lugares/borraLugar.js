@@ -2,9 +2,9 @@
 
 const getDB = require('../../db/db');
 
-const { deletePhoto } = require('../../helpers');
+const { borrarFoto } = require('../../helpers');
 
-const deletePlace = async (req, res, next) => {
+const borraLugar = async (req, res, next) => {
   let connection;
 
   try {
@@ -31,7 +31,7 @@ const deletePlace = async (req, res, next) => {
     );
 
     for (const item of photos) {
-      await deletePhoto(item.photo);
+      await borrarFoto(item.photo);
     }
 
     await connection.query(
@@ -60,4 +60,4 @@ const deletePlace = async (req, res, next) => {
     if (connection) connection.release();
   }
 };
-module.exports = deletePlace;
+module.exports = borraLugar;

@@ -1,9 +1,9 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { savePhoto, generateError } = require('../../helpers');
+const { guardarFoto, generarError } = require('../../helpers');
 
-const newPlace = async (req, res, next) => {
+const nuevoLugar = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
@@ -11,7 +11,7 @@ const newPlace = async (req, res, next) => {
     const { title, city, distric, description } = req.body;
 
     if (!title || !description || !city || !distric) {
-      generateError('Te falta algún campo obligatorio por rellenar', 400);
+      generarError('Te falta algún campo obligatorio por rellenar', 400);
     }
 
     const [result] = await connection.query(
@@ -26,7 +26,7 @@ const newPlace = async (req, res, next) => {
 
     if (req.files && Object.keys(req.files).length > 0) {
       for (const photosData of Object.values(req.files).slice(0, 3)) {
-        const photoName = await savePhoto(photosData);
+        const photoName = await guardarFoto(photosData);
         await connection.query(
           `
                 INSERT INTO places_photos(uploadDate, photo, place_id)
@@ -51,4 +51,4 @@ const newPlace = async (req, res, next) => {
   }
 };
 
-module.exports = newPlace;
+module.exports = nuevoLugar;

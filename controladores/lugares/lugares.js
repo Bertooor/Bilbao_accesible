@@ -2,7 +2,7 @@
 
 const getDB = require('../../db/db');
 
-const listPlaces = async (req, res, next) => {
+const lugares = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
@@ -74,4 +74,4 @@ const listPlaces = async (req, res, next) => {
   }
 };
 
-module.exports = listPlaces;
+module.exports = lugares;

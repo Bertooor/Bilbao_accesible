@@ -1,9 +1,9 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { generateError } = require('../../helpers');
+const { generarError } = require('../../helpers');
 
-const editPlace = async (req, res, next) => {
+const editaLugar = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
@@ -14,7 +14,7 @@ const editPlace = async (req, res, next) => {
     const { title, city, distric, description } = req.body;
 
     if (!title || !description || !city || !distric) {
-      generateError('Te falta algún campo obligatorio por rellenar', 400);
+      generarError('Te falta algún campo obligatorio por rellenar', 400);
     }
 
     await connection.query(
@@ -43,4 +43,4 @@ const editPlace = async (req, res, next) => {
   }
 };
 
-module.exports = editPlace;
+module.exports = editaLugar;

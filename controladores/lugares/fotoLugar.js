@@ -2,9 +2,9 @@
 
 const getDB = require('../../db/db');
 
-const { savePhoto, generateError } = require('../../helpers');
+const { guardarFoto, generarError } = require('../../helpers');
 
-const addPlacePhoto = async (req, res, next) => {
+const fotoLugar = async (req, res, next) => {
   let connection;
 
   try {
@@ -22,7 +22,7 @@ const addPlacePhoto = async (req, res, next) => {
     );
 
     if (currentPhotos.length >= 3) {
-      generateError(
+      generarError(
         'No puedes subir más fotos a este lugar, a no ser que borres alguna',
         403
       );
@@ -32,7 +32,7 @@ const addPlacePhoto = async (req, res, next) => {
 
     if (req.files && Object.keys(req.files).length > 0) {
       console.log(Object.values(req.files)[0]);
-      savedPhoto = await savePhoto(Object.values(req.files)[0]);
+      savedPhoto = await guardarFoto(Object.values(req.files)[0]);
 
       await connection.query(
         `
@@ -56,4 +56,4 @@ const addPlacePhoto = async (req, res, next) => {
   }
 };
 
-module.exports = addPlacePhoto;
+module.exports = fotoLugar;

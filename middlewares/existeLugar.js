@@ -1,9 +1,9 @@
 'use strict';
 
 const getDB = require('../db/db');
-const { generateError } = require('../helpers');
+const { generarError } = require('../helpers');
 
-const placeExist = async (req, res, next) => {
+const existeLugar = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
@@ -22,11 +22,11 @@ const placeExist = async (req, res, next) => {
     console.log(result, id);
 
     if (result.length === 0) {
-      generateError('Lugar no encontrado', 404);
+      generarError('Lugar no encontrado', 404);
     }
     next();
   } catch (error) {
     next(error);
   }
 };
-module.exports = placeExist;
+module.exports = existeLugar;

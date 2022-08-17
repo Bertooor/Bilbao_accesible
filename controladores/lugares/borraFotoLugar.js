@@ -2,9 +2,9 @@
 
 const getDB = require('../../db/db');
 
-const { deletePhoto, generateError } = require('../../helpers');
+const { borrarFoto, generarError } = require('../../helpers');
 
-const deletePlacePhoto = async (req, res, next) => {
+const borraFotoLugar = async (req, res, next) => {
   let connection;
 
   try {
@@ -22,10 +22,10 @@ const deletePlacePhoto = async (req, res, next) => {
     );
 
     if (current.length === 0) {
-      generateError('La foto no existe', 404);
+      generarError('La foto no existe', 404);
     }
 
-    await deletePhoto(current[0].photo);
+    await borrarFoto(current[0].photo);
 
     await connection.query(
       `
@@ -47,4 +47,4 @@ const deletePlacePhoto = async (req, res, next) => {
   }
 };
 
-module.exports = deletePlacePhoto;
+module.exports = borraFotoLugar;
