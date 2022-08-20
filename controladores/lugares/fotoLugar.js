@@ -12,7 +12,7 @@ const fotoLugar = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const [currentPhotos] = await connection.query(
+    const [imagenId] = await connection.query(
       `
             SELECT id
             FROM places_photos
@@ -21,32 +21,32 @@ const fotoLugar = async (req, res, next) => {
       [id]
     );
 
-    if (currentPhotos.length >= 3) {
+    if (imagenId.length >= 3) {
       generarError(
         'No puedes subir más fotos a este lugar, a no ser que borres alguna',
         403
       );
     }
 
-    let savedPhoto;
+    let fotoGuardada;
 
     if (req.files && Object.keys(req.files).length > 0) {
-      console.log(Object.values(req.files)[0]);
-      savedPhoto = await guardarFoto(Object.values(req.files)[0]);
+      fotoGuardada = await guardarFoto(Object.values(req.files)[0]);
 
       await connection.query(
         `
             INSERT INTO places_photos (uploadDate, photo, place_id)
             VALUES (CURRENT_TIMESTAMP,?,?)
            `,
-        [savedPhoto, id]
+        [fotoGuardada, id]
       );
     }
 
     res.send({
       status: 'ok',
+      message: 'Imagen guardada.',
       data: {
-        photo: savedPhoto,
+        photo: fotoGuardada,
       },
     });
   } catch (error) {

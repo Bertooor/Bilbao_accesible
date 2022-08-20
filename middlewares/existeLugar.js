@@ -10,7 +10,7 @@ const existeLugar = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const [result] = await connection.query(
+    const [idLugar] = await connection.query(
       `
       SELECT id 
       FROM places 
@@ -19,14 +19,16 @@ const existeLugar = async (req, res, next) => {
       [id]
     );
 
-    console.log(result, id);
+    console.log(idLugar, id);
 
-    if (result.length === 0) {
+    if (idLugar.length === 0) {
       generarError('Lugar no encontrado', 404);
     }
     next();
   } catch (error) {
     next(error);
+  } finally {
+    if (connection) connection.release();
   }
 };
 module.exports = existeLugar;

@@ -1,16 +1,18 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { generarError } = require('../../helpers');
+const { generarError, validar } = require('../../helpers');
+const { placeSchema } = require('../../schemas');
 
 const editaLugar = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
 
+    await validar(placeSchema, req.body);
+
     const { id } = req.params;
 
-    //joi
     const { title, city, distric, description } = req.body;
 
     if (!title || !description || !city || !distric) {

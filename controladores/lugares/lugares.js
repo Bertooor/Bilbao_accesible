@@ -7,65 +7,70 @@ const lugares = async (req, res, next) => {
   try {
     connection = await getDB();
 
-    const { search, order, direction } = req.query;
+    const { buscar, datosPermitidos, ordenDatos } = req.query;
+    console.log(buscar, datosPermitidos, ordenDatos);
 
-    const validatorOrderField = ['city', 'distric', 'title'];
-    const orderBy = validatorOrderField.includes(order) ? order : 'distric';
+    const validarDatosPermitidos = ['city', 'distric', 'title', 'created_at'];
+    const recogerDatosPermitidos = validarDatosPermitidos.includes(
+      datosPermitidos
+    )
+      ? datosPermitidos
+      : 'distric';
 
-    const validatorDirectionField = ['ASC', 'DESC'];
-    const orderDirection = validatorDirectionField.includes(direction)
-      ? direction
+    const validarOrden = ['ASC', 'DESC'];
+    const datosOrdenados = validarOrden.includes(ordenDatos)
+      ? ordenDatos
       : 'ASC';
 
-    let places;
+    let lugares;
 
-    if (search) {
-      [places] = await connection.query(
+    if (buscar) {
+      [lugares] = await connection.query(
         `
         SELECT id, created_at, title, city, distric
         FROM places
-        WHERE description LIKE ?
-        ORDER BY ${orderBy} ${orderDirection}
+        WHERE distric LIKE ? OR description LIKE ?
+        ORDER BY ${recogerDatosPermitidos} ${datosOrdenados}
       `,
-        [`%${search}%`]
+        [`%${buscar}%`, `%${buscar}%`]
       );
     } else {
-      [places] = await connection.query(
+      [lugares] = await connection.query(
         `
         SELECT id, created_at, title, city, distric
         FROM places
-        ORDER BY ${orderBy} ${orderDirection}
+        ORDER BY ${recogerDatosPermitidos} ${datosOrdenados}
         `
       );
     }
 
-    let placesWithPhotos = [];
+    let imagenesDeLugares = [];
 
-    if (places.length > 0) {
-      const arrayIds = places.map((place) => {
+    if (lugares.length > 0) {
+      const arrayIds = lugares.map((place) => {
         return place.id;
       });
 
-      const [photos] = await connection.query(`
+      const [imagenes] = await connection.query(`
         SELECT *
         FROM places_photos
         WHERE place_id IN (${arrayIds.join(',')})
       `);
 
-      placesWithPhotos = places.map((place) => {
-        const photosPlace = photos.filter((photo) => {
+      imagenesDeLugares = lugares.map((place) => {
+        const fotosLugar = imagenes.filter((photo) => {
           return photo.place_id === place.id;
         });
         return {
           ...place,
-          photos: photosPlace,
+          imagenes: fotosLugar,
         };
       });
     }
     res.send({
       status: 'ok',
       message: 'Listado de lugares',
-      data: placesWithPhotos,
+      data: imagenesDeLugares,
     });
   } catch (error) {
     next(error);

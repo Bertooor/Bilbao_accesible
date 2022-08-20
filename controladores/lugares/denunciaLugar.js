@@ -10,13 +10,14 @@ const denunciaLugar = async (req, res, next) => {
     connection = await getDB();
 
     const { id } = req.params;
-    const { complaint } = req.body;
+    const { denuncia } = req.body;
+    console.log('denuncia', denuncia);
 
-    if (complaint !== 1) {
+    if (denuncia !== 1) {
       generarError('La denuncia se hace con el "1"', 400);
     }
 
-    const [existingComplaint] = await connection.query(
+    const [idDenuncia] = await connection.query(
       `
             SELECT id
             FROM places_complaints
@@ -25,7 +26,7 @@ const denunciaLugar = async (req, res, next) => {
       [req.userAuth.id, id]
     );
 
-    if (existingComplaint.length > 0) {
+    if (idDenuncia.length > 0) {
       generarError('Ya denunciaste este problema', 400);
     }
 
@@ -34,22 +35,29 @@ const denunciaLugar = async (req, res, next) => {
             INSERT INTO places_complaints (created_at, complaint, place_id, user_id)
             VALUES (CURRENT_TIMESTAMP,?,?,?)
         `,
-      [complaint, id, req.userAuth.id]
+      [denuncia, id, req.userAuth.id]
     );
 
-    const [numberComplaints] = await connection.query(
+    const [numDenunciasLugar] = await connection.query(
       `
-            SELECT *
+            SELECT count(complaint) AS denuncias_lugar
             FROM places_complaints
-            WHERE place_id = ? 
-        `,
+            WHERE place_id = ?
+      `,
       [id]
     );
 
+    const [totalDenuncias] = await connection.query(`
+      SELECT count(id) AS denuncias_totales
+      FROM places_complaints
+    `);
+
     res.send({
       status: 'ok',
-      data: {
-        ...numberComplaints[0],
+      message: 'Denuncia realizada.',
+      denuncias: {
+        ...numDenunciasLugar[0],
+        ...totalDenuncias[0],
       },
     });
   } catch (error) {

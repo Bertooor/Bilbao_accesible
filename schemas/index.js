@@ -13,4 +13,17 @@ const registrationSchema = Joi.object().keys({
     .error(new Error(`La contraseña debe tener entre 6 y 20 caracteres`)),
 });
 
-module.exports = registrationSchema;
+const adminSchema = Joi.object().keys({
+  name: Joi.string().required(),
+  email: Joi.string().required().email(),
+  password: Joi.string().required(),
+});
+
+const placeSchema = Joi.object().keys({
+  title: Joi.string().required().max(100),
+  city: Joi.string().required().max(100),
+  distric: Joi.string().required().max(100),
+  description: Joi.string().required(),
+});
+
+module.exports = { registrationSchema, adminSchema, placeSchema };

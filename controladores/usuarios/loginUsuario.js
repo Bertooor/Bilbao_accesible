@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const getDB = require('../../db/db');
 const { validar, generarError } = require('../../helpers');
-const registrationSchema = require('../../schemas');
+const { registrationSchema } = require('../../schemas');
 
 const loginUsuario = async (req, res, next) => {
   let connection;

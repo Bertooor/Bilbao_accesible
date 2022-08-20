@@ -9,40 +9,46 @@ const lugar = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const [result] = await connection.query(
+    const [datosLugar] = await connection.query(
       `
-      SELECT id, created_at, title, description, city, distric
+      SELECT id, created_at, title, description, city, distric, problem_solved
       FROM places
       WHERE id = ?
     `,
       [id]
     );
 
-    const [photos] = await connection.query(
+    const [imagenes] = await connection.query(
       `
-      SELECT id, created_at, photo, place_id
+      SELECT id, uploadDate, photo, place_id
       FROM places_photos
       WHERE place_id = ?
     `,
       [id]
     );
 
-    const [complaints] = await connection.query(
+    const [numDenunciasLugar] = await connection.query(
       `
-      SELECT complaint
-      FROM places_complaints
-      WHERE id = ?
-    `,
+            SELECT count(complaint) AS denuncias_lugar
+            FROM places_complaints
+            WHERE place_id = ?
+      `,
       [id]
     );
 
+    const [totalDenuncias] = await connection.query(`
+      SELECT count(id) AS denuncias_totales
+      FROM places_complaints
+    `);
+
     res.send({
       status: 'ok',
-      message: 'Detalle del lugar',
+      message: 'Detalles del lugar',
       data: {
-        ...result[0],
-        photos,
-        complaints,
+        ...datosLugar[0],
+        imagenes,
+        ...numDenunciasLugar[0],
+        ...totalDenuncias[0],
       },
     });
   } catch (error) {

@@ -40,6 +40,7 @@ const fotoAvatar = async (req, res, next) => {
 
     res.send({
       status: 'ok',
+      message: 'Imagen avatar añadida.',
       data: {
         photo: fotoGuardada,
       },

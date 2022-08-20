@@ -10,22 +10,22 @@ const borraFotoLugar = async (req, res, next) => {
   try {
     connection = await getDB();
 
-    const { id, photoID } = req.params;
+    const { id, imagenId } = req.params;
 
-    const [current] = await connection.query(
+    const [imagen] = await connection.query(
       `
             SELECT photo
             FROM places_photos
             WHERE id = ? AND place_id = ?
         `,
-      [photoID, id]
+      [imagenId, id]
     );
 
-    if (current.length === 0) {
+    if (imagen.length === 0) {
       generarError('La foto no existe', 404);
     }
 
-    await borrarFoto(current[0].photo);
+    await borrarFoto(imagen[0].photo);
 
     await connection.query(
       `
@@ -33,7 +33,7 @@ const borraFotoLugar = async (req, res, next) => {
             FROM places_photos
             WHERE id = ? AND place_id = ?
         `,
-      [photoID, id]
+      [imagenId, id]
     );
 
     res.send({

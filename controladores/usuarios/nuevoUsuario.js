@@ -1,6 +1,6 @@
 'use strict';
 
-const registrationSchema = require('../../schemas');
+const { registrationSchema } = require('../../schemas');
 const {
   validar,
   generarCodigoRandom,

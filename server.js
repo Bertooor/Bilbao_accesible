@@ -35,13 +35,16 @@ const {
   recuperaContrasena,
   nuevaContrasena,
   fotoAvatar,
+  borroAvatar,
+  loginAdmin,
 } = require('./controladores/usuarios/index');
 const {
   puedeEditarLugar,
   usuarioAutorizado,
   existeLugar,
   existeUsuario,
-} = require('./middlewares');
+  esAdmin,
+} = require('./middlewares/index');
 
 app.use(morgan('dev'));
 
@@ -61,37 +64,20 @@ app.put('/usuarios/:id', existeUsuario, usuarioAutorizado, editaUsuario);
 app.post('/usuarios/recuperaContrasena', recuperaContrasena);
 app.post('/usuarios/nuevaContrasena', nuevaContrasena);
 app.post('/usuarios/:id/avatar', usuarioAutorizado, fotoAvatar);
+app.delete('/usuarios/:id/avatar/:avatarId', usuarioAutorizado, borroAvatar);
+app.post('/admin', loginAdmin);
 
-app.post('/lugares', usuarioAutorizado, nuevoLugar);
+app.post('/lugares', esAdmin, nuevoLugar);
 app.get('/lugares', lugares);
 app.get('/lugares/:id', lugar);
-app.put(
-  '/lugares/:id',
-  usuarioAutorizado,
-  existeLugar,
-  puedeEditarLugar,
-  editaLugar
-);
-app.post('/lugares/:id/', usuarioAutorizado, existeLugar, denunciaLugar);
+app.put('/lugares/:id', esAdmin, existeLugar, editaLugar);
+app.post('/lugares/:id', usuarioAutorizado, existeLugar, denunciaLugar);
+app.delete('/lugares/:id', esAdmin, existeLugar, borraLugar);
+app.post('/lugares/:id/imagenes', esAdmin, existeLugar, fotoLugar);
 app.delete(
-  '/lugares/:id',
-  usuarioAutorizado,
+  '/lugares/:id/imagenes/:imagenId',
+  esAdmin,
   existeLugar,
-  puedeEditarLugar,
-  borraLugar
-);
-app.post(
-  '/lugares/:id/photos',
-  usuarioAutorizado,
-  existeLugar,
-  puedeEditarLugar,
-  fotoLugar
-);
-app.delete(
-  '/lugares/:id/photos/:photoID',
-  usuarioAutorizado,
-  existeLugar,
-  puedeEditarLugar,
   borraFotoLugar
 );
 

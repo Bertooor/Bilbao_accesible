@@ -1,45 +1,48 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { guardarFoto, generarError } = require('../../helpers');
+const { guardarFoto, generarError, validar } = require('../../helpers');
+const { placeSchema } = require('../../schemas');
 
 const nuevoLugar = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
-    //joi
+
+    await validar(placeSchema, req.body);
+
     const { title, city, distric, description } = req.body;
 
     if (!title || !description || !city || !distric) {
       generarError('Te falta algún campo obligatorio por rellenar', 400);
     }
 
-    const [result] = await connection.query(
+    const [datosLugar] = await connection.query(
       `
         INSERT INTO places ( title, city, distric, description, user_id)
         VALUES (?,?,?,?,?);
     `,
-      [title, city, distric, description, req.userAuth.id]
+      [title, city, distric, description, 1]
     );
 
-    const { insertId } = result;
+    const { insertId } = datosLugar;
 
     if (req.files && Object.keys(req.files).length > 0) {
-      for (const photosData of Object.values(req.files).slice(0, 3)) {
-        const photoName = await guardarFoto(photosData);
+      for (const imagen of Object.values(req.files).slice(0, 3)) {
+        const nombreFoto = await guardarFoto(imagen);
         await connection.query(
           `
                 INSERT INTO places_photos(uploadDate, photo, place_id)
                 VALUES(CURRENT_TIMESTAMP,?,?);
             `,
-          [photoName, insertId]
+          [nombreFoto, insertId]
         );
       }
     }
 
     res.send({
       status: 'ok',
-      message: 'Nuevo lugar',
+      message: 'Nuevo lugar añadido.',
       data: {
         id: insertId,
       },

@@ -1,7 +1,7 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { generarError } = require('../../helpers');
+const { generarError, borrarFoto } = require('../../helpers');
 
 const borraUsuario = async (req, res, next) => {
   let connection;
@@ -18,6 +18,28 @@ const borraUsuario = async (req, res, next) => {
     if (req.userAuth.id !== Number(id) && req.userAuth.role !== 'admin') {
       generarError('No tienes permisos para eliminar a este usuario', 401);
     }
+
+    const [avatar] = await connection.query(
+      `
+      SELECT photo
+      FROM users_avatar
+      WHERE user_id = ?
+    `,
+      [id]
+    );
+
+    if (avatar && avatar.length > 0) {
+      await borrarFoto(avatar[0].photo);
+    }
+
+    await connection.query(
+      `
+      DELETE
+      FROM users_avatar
+      WHERE user_id = ?
+    `,
+      [id]
+    );
 
     await connection.query(
       `

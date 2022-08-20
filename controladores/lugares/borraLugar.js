@@ -12,7 +12,7 @@ const borraLugar = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const [photos] = await connection.query(
+    const [imagenes] = await connection.query(
       `
         SELECT photo 
         FROM places_photos
@@ -30,7 +30,7 @@ const borraLugar = async (req, res, next) => {
       [id]
     );
 
-    for (const item of photos) {
+    for (const item of imagenes) {
       await borrarFoto(item.photo);
     }
 
