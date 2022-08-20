@@ -16,7 +16,7 @@ const recuperaContrasena = async (req, res, next) => {
     const { email } = req.body;
 
     if (!email) {
-      generarError('Faltan campos', 400);
+      generarError('Faltan campos.', 400);
     }
 
     const [confirmaEmail] = await connection.query(
@@ -29,7 +29,7 @@ const recuperaContrasena = async (req, res, next) => {
     );
 
     if (confirmaEmail.length === 0) {
-      generarError('No hay ningún usuario registrado con este email');
+      generarError('No hay ningún usuario registrado con este email.');
     }
 
     const recoverCode = generarCodigoRandom(40);
@@ -60,7 +60,7 @@ const recuperaContrasena = async (req, res, next) => {
     });
 
     res.send({
-      status: 'ok',
+      status: 'ok.',
       message: 'Revisa tu correo para cambiar tu contraseña.',
     });
   } catch (error) {

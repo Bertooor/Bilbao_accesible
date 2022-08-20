@@ -9,6 +9,8 @@ async function main() {
     connection = await getDB();
 
     console.log(`Borrando las tablas...`);
+    await connection.query(`DROP TABLE IF EXISTS suggestions_photos;`);
+    await connection.query(`DROP TABLE IF EXISTS suggestions;`);
     await connection.query(`DROP TABLE IF EXISTS places_complaints;`);
     await connection.query(`DROP TABLE IF EXISTS places_photos;`);
     await connection.query(`DROP TABLE IF EXISTS places;`);
@@ -78,6 +80,29 @@ async function main() {
         user_id INT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
         -- CONSTRAINT uc_user_place UNIQUE (user_id , place_id)
+      )
+    `);
+
+    await connection.query(`
+      CREATE TABLE suggestions (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        title VARCHAR(100) NOT NULL,
+        description TEXT NOT NULL,
+        city VARCHAR(100) NOT NULL,
+        distric VARCHAR(100) NOT NULL,
+        user_id INT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id)
+      )
+    `);
+
+    await connection.query(`
+      CREATE TABLE suggestions_photos (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        uploadDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+        photo VARCHAR(100) NOT NULL,
+        suggestion_id INT NOT NULL,
+        FOREIGN KEY(suggestion_id) REFERENCES suggestions(id)
       )
     `);
 

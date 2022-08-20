@@ -39,11 +39,21 @@ const {
   loginAdmin,
 } = require('./controladores/usuarios/index');
 const {
-  puedeEditarLugar,
+  nuevaSugerencia,
+  sugerencias,
+  sugerencia,
+  editaSugerencia,
+  borraSugerencia,
+  fotoSugerencia,
+  borraFotoSugerencia,
+} = require('./controladores/sugerencias/index');
+const {
   usuarioAutorizado,
   existeLugar,
   existeUsuario,
   esAdmin,
+  existeSugerencia,
+  puedeEditarSugerencia,
 } = require('./middlewares/index');
 
 app.use(morgan('dev'));
@@ -79,6 +89,38 @@ app.delete(
   esAdmin,
   existeLugar,
   borraFotoLugar
+);
+
+app.post('/sugerencias', usuarioAutorizado, nuevaSugerencia);
+app.get('/sugerencias', esAdmin, sugerencias);
+app.get('/sugerencias/:id', esAdmin, sugerencia);
+app.put(
+  '/sugerencias/:id',
+  usuarioAutorizado,
+  existeSugerencia,
+  puedeEditarSugerencia,
+  editaSugerencia
+);
+app.delete(
+  '/sugerencias/:id',
+  usuarioAutorizado,
+  existeSugerencia,
+  puedeEditarSugerencia,
+  borraSugerencia
+);
+app.post(
+  '/sugerencias/:id/imagenes',
+  usuarioAutorizado,
+  existeSugerencia,
+  puedeEditarSugerencia,
+  fotoSugerencia
+);
+app.delete(
+  '/sugerencias/:id/imagenes/:imagenId',
+  usuarioAutorizado,
+  existeSugerencia,
+  puedeEditarSugerencia,
+  borraFotoSugerencia
 );
 
 app.use((req, res) => {

@@ -12,11 +12,11 @@ const borraUsuario = async (req, res, next) => {
     const { id } = req.params;
 
     if (Number(id) === 1) {
-      generarError('El administrador principal no se puede eliminar', 403);
+      generarError('El administrador principal no se puede eliminar.', 403);
     }
 
     if (req.userAuth.id !== Number(id) && req.userAuth.role !== 'admin') {
-      generarError('No tienes permisos para eliminar a este usuario', 401);
+      generarError('No tienes permisos para eliminar a este usuario.', 401);
     }
 
     const [avatar] = await connection.query(
@@ -51,8 +51,8 @@ const borraUsuario = async (req, res, next) => {
     );
 
     res.send({
-      status: 'ok',
-      message: `El usuario con id: ${id}, ha sido borrado de la base de datos`,
+      status: 'ok.',
+      message: `El usuario con id: ${id}, ha sido borrado de la base de datos.`,
     });
   } catch (error) {
     next(error);

@@ -4,7 +4,7 @@ const getDB = require('../../db/db');
 
 const { borrarFoto } = require('../../helpers');
 
-const borraLugar = async (req, res, next) => {
+const borraSugerencia = async (req, res, next) => {
   let connection;
 
   try {
@@ -15,8 +15,8 @@ const borraLugar = async (req, res, next) => {
     const [imagenes] = await connection.query(
       `
         SELECT photo 
-        FROM places_photos
-        WHERE place_id = ?
+        FROM suggestions_photos
+        WHERE suggestion_id = ?
     `,
       [id]
     );
@@ -24,8 +24,8 @@ const borraLugar = async (req, res, next) => {
     await connection.query(
       `
         DELETE
-        FROM places_photos
-        WHERE place_id = ?
+        FROM suggestions_photos
+        WHERE suggestion_id = ?
     `,
       [id]
     );
@@ -36,23 +36,14 @@ const borraLugar = async (req, res, next) => {
 
     await connection.query(
       `
-        DELETE 
-        FROM places_complaints
-        WHERE place_id = ?
-    `,
-      [id]
-    );
-
-    await connection.query(
-      `
-        DELETE FROM places WHERE id = ?
+        DELETE FROM suggestions WHERE id = ?
     `,
       [id]
     );
 
     res.send({
       status: 'ok.',
-      message: `El lugar con id ${id} y todos sus elementos relacionados, fueron borrados de la base de datos.`,
+      message: `La sugerencia con id ${id} y todos sus elementos relacionados, fueron borrados de la base de datos.`,
     });
   } catch (error) {
     next(error);
@@ -60,4 +51,4 @@ const borraLugar = async (req, res, next) => {
     if (connection) connection.release();
   }
 };
-module.exports = borraLugar;
+module.exports = borraSugerencia;

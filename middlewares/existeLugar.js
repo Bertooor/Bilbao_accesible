@@ -22,7 +22,7 @@ const existeLugar = async (req, res, next) => {
     console.log(idLugar, id);
 
     if (idLugar.length === 0) {
-      generarError('Lugar no encontrado', 404);
+      generarError('Lugar no encontrado.', 404);
     }
     next();
   } catch (error) {

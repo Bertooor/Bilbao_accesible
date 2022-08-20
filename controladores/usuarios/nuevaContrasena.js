@@ -12,7 +12,7 @@ const nuevaContrasena = async (req, res, next) => {
     const { recoverCode, nuevaContrasena } = req.body;
 
     if (!recoverCode || !nuevaContrasena) {
-      generarError('Faltan campos por completar', 400);
+      generarError('Faltan campos por completar.', 400);
     }
 
     const [comprobacionUsuario] = await connection.query(
@@ -38,7 +38,7 @@ const nuevaContrasena = async (req, res, next) => {
     );
 
     res.send({
-      status: 'ok',
+      status: 'ok.',
       message: 'Contraseña cambiada con éxito.',
     });
   } catch (error) {

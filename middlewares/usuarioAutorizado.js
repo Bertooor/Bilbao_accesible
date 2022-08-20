@@ -13,7 +13,7 @@ const usuarioAutorizado = async (req, res, next) => {
     console.log('authorization', authorization);
 
     if (!authorization) {
-      generarError('Falta la cabecera de authorization', 401);
+      generarError('Falta la cabecera de authorization.', 401);
     }
 
     let tokenInfo;
@@ -39,7 +39,7 @@ const usuarioAutorizado = async (req, res, next) => {
     console.log('time', ultimaCreacionToken);
 
     if (ultimaCreacionToken < lastAuthUpdate) {
-      generarError('Token caducado', 401);
+      generarError('Token caducado.', 401);
     }
 
     req.userAuth = tokenInfo;

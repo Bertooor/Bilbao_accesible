@@ -28,7 +28,7 @@ const loginAdmin = async (req, res, next) => {
     }
 
     res.send({
-      status: 'ok',
+      status: 'ok.',
       message: 'Datos correctos, acceso a zona de administración.',
     });
   } catch (error) {

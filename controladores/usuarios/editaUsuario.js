@@ -5,7 +5,9 @@ const {
   generarError,
   generarCodigoRandom,
   enviarMail,
+  validar,
 } = require('../../helpers');
+const { usuarioSchema } = require('../../schemas');
 
 const editaUsuario = async (req, res, next) => {
   let connection;
@@ -16,7 +18,7 @@ const editaUsuario = async (req, res, next) => {
     const { id } = req.params;
 
     if (req.userAuth.id !== Number(id) && req.userAuth.role !== 'admin') {
-      generarError('No tienes permisos para editar este usuario', 403);
+      generarError('No tienes permisos para editar este usuario.', 403);
     }
 
     const [infoUsuario] = await connection.query(
@@ -27,6 +29,8 @@ const editaUsuario = async (req, res, next) => {
       `,
       [id]
     );
+
+    await validar(usuarioSchema, req.body);
 
     const { name, email, avatar } = req.body;
 
@@ -41,7 +45,7 @@ const editaUsuario = async (req, res, next) => {
       );
 
       if (existeMail.length > 0) {
-        generarError('Ya existe un usuario con el email proporcionado', 409);
+        generarError('Ya existe un usuario con el email proporcionado.', 409);
       }
 
       const registrationCode = generarCodigoRandom(30);
@@ -53,7 +57,7 @@ const editaUsuario = async (req, res, next) => {
 
       await enviarMail({
         to: email,
-        subject: 'Confirma tu nuevo email',
+        subject: 'Confirma tu nuevo email.',
         body: emailBody,
       });
 
@@ -67,9 +71,9 @@ const editaUsuario = async (req, res, next) => {
       );
 
       res.send({
-        status: 'ok',
+        status: 'ok.',
         message:
-          'Datos de usuario actualizados. Mira tu email para validar los nuevos datos',
+          'Datos de usuario actualizados. Revisa tu email para validar los nuevos datos.',
       });
     } else {
       await connection.query(
@@ -82,8 +86,8 @@ const editaUsuario = async (req, res, next) => {
       );
 
       res.send({
-        status: 'ok',
-        message: 'Datos de usuario actualizados',
+        status: 'ok.',
+        message: 'Datos de usuario actualizados.',
       });
     }
   } catch (error) {

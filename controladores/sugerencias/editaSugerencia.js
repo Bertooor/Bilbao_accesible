@@ -4,7 +4,7 @@ const getDB = require('../../db/db');
 const { generarError, validar } = require('../../helpers');
 const { placeSchema } = require('../../schemas');
 
-const editaLugar = async (req, res, next) => {
+const editaSugerencia = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
@@ -16,20 +16,20 @@ const editaLugar = async (req, res, next) => {
     const { title, city, distric, description } = req.body;
 
     if (!title || !description || !city || !distric) {
-      generarError('Te falta algún campo requerido por rellenar.', 400);
+      generarError('Te falta algún campo obligatorio por rellenar.', 400);
     }
 
     await connection.query(
       `
-        UPDATE places SET title=?, city=?, distric=?, description=? 
+        UPDATE suggestions SET title=?, city=?, distric=?, description=? 
         WHERE id=?
     `,
       [title, city, distric, description, id]
     );
 
     res.send({
-      status: 'ok',
-      message: 'Lugar editado.',
+      status: 'ok.',
+      message: 'Sugerencia editada.',
       data: {
         id,
         title,
@@ -45,4 +45,4 @@ const editaLugar = async (req, res, next) => {
   }
 };
 
-module.exports = editaLugar;
+module.exports = editaSugerencia;

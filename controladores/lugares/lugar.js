@@ -42,8 +42,8 @@ const lugar = async (req, res, next) => {
     `);
 
     res.send({
-      status: 'ok',
-      message: 'Detalles del lugar',
+      status: 'ok.',
+      message: 'Detalles del lugar.',
       data: {
         ...datosLugar[0],
         imagenes,

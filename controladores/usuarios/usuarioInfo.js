@@ -31,7 +31,7 @@ const usuarioInfo = async (req, res, next) => {
     }
 
     res.send({
-      status: 'ok',
+      status: 'ok.',
       message: 'Información usuario.',
       data: {
         usuarioInf,

@@ -23,7 +23,7 @@ const fotoLugar = async (req, res, next) => {
 
     if (imagenId.length >= 3) {
       generarError(
-        'No puedes subir más fotos a este lugar, a no ser que borres alguna',
+        'No puedes subir más fotos a este lugar, a no ser que borres alguna.',
         403
       );
     }
@@ -43,7 +43,7 @@ const fotoLugar = async (req, res, next) => {
     }
 
     res.send({
-      status: 'ok',
+      status: 'ok.',
       message: 'Imagen guardada.',
       data: {
         photo: fotoGuardada,

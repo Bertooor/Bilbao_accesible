@@ -4,7 +4,7 @@ const getDB = require('../../db/db');
 const { guardarFoto, generarError, validar } = require('../../helpers');
 const { placeSchema } = require('../../schemas');
 
-const nuevoLugar = async (req, res, next) => {
+const nuevaSugerencia = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
@@ -17,22 +17,22 @@ const nuevoLugar = async (req, res, next) => {
       generarError('Te falta algún campo obligatorio por rellenar.', 400);
     }
 
-    const [datosLugar] = await connection.query(
+    const [datosSugerencia] = await connection.query(
       `
-        INSERT INTO places ( title, city, distric, description, user_id)
+        INSERT INTO suggestions ( title, city, distric, description, user_id)
         VALUES (?,?,?,?,?);
     `,
-      [title, city, distric, description, 1]
+      [title, city, distric, description, req.userAuth.id]
     );
 
-    const { insertId } = datosLugar;
+    const { insertId } = datosSugerencia;
 
     if (req.files && Object.keys(req.files).length > 0) {
       for (const imagen of Object.values(req.files).slice(0, 3)) {
         const nombreFoto = await guardarFoto(imagen);
         await connection.query(
           `
-                INSERT INTO places_photos(uploadDate, photo, place_id)
+                INSERT INTO suggestions_photos(uploadDate, photo, suggestion_id)
                 VALUES(CURRENT_TIMESTAMP,?,?);
             `,
           [nombreFoto, insertId]
@@ -42,7 +42,7 @@ const nuevoLugar = async (req, res, next) => {
 
     res.send({
       status: 'ok.',
-      message: 'Nuevo lugar añadido.',
+      message: 'Nuevo sugerencia añadida.',
       data: {
         id: insertId,
       },
@@ -54,4 +54,4 @@ const nuevoLugar = async (req, res, next) => {
   }
 };
 
-module.exports = nuevoLugar;
+module.exports = nuevaSugerencia;

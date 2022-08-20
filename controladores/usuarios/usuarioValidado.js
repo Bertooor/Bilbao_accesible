@@ -21,7 +21,7 @@ const usuarioValidado = async (req, res, next) => {
     );
 
     if (user.length === 0) {
-      generarError('Ningún usuario con este código de validación', 404);
+      generarError('Ningún usuario con este código de validación.', 404);
     }
 
     await connection.query(
@@ -34,8 +34,8 @@ const usuarioValidado = async (req, res, next) => {
     );
 
     res.send({
-      status: 'ok',
-      message: 'Usuario validado',
+      status: 'ok.',
+      message: 'Usuario validado.',
     });
   } catch (error) {
     next(error);

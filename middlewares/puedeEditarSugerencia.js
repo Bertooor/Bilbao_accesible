@@ -3,34 +3,34 @@
 const getDB = require('../db/db');
 const { generarError } = require('../helpers');
 
-const puedeEditarLugar = async (req, res, next) => {
+const puedeEditarSugerencia = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
 
     const { id } = req.params;
 
-    const [current] = await connection.query(
+    const [idUsuario] = await connection.query(
       `
       SELECT user_id
-      FROM places
+      FROM suggestions
       WHERE id = ?
     `,
       [id]
     );
 
-    console.log('Id de usuario que creó el place:', current[0].user_id);
-
     if (
-      req.userAuth.id !== current[0].user_id &&
+      req.userAuth.id !== idUsuario[0].user_id &&
       req.userAuth.role !== 'admin'
     ) {
-      generarError('No tienes los permisos para editar el lugar', 401);
+      generarError('No tienes los permisos para editar la sugerencia.', 401);
     }
 
     next();
   } catch (error) {
     next(error);
+  } finally {
+    if (connection) connection.release();
   }
 };
-module.exports = puedeEditarLugar;
+module.exports = puedeEditarSugerencia;

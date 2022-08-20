@@ -57,7 +57,7 @@ async function enviarMail({ to, subject, body }) {
     };
     await sgEmail.send(msg);
   } catch (error) {
-    throw new Error('Error enviando email');
+    throw new Error('Error enviando email.');
   }
 }
 

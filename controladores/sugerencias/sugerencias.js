@@ -2,13 +2,12 @@
 
 const getDB = require('../../db/db');
 
-const lugares = async (req, res, next) => {
+const sugerencias = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
 
     const { buscar, datosPermitidos, ordenDatos } = req.query;
-    console.log(buscar, datosPermitidos, ordenDatos);
 
     const validarDatosPermitidos = ['city', 'distric', 'title', 'created_at'];
     const recogerDatosPermitidos = validarDatosPermitidos.includes(
@@ -22,23 +21,23 @@ const lugares = async (req, res, next) => {
       ? ordenDatos
       : 'ASC';
 
-    let lugares;
+    let sugerencias;
 
     if (buscar) {
-      [lugares] = await connection.query(
+      [sugerencias] = await connection.query(
         `
         SELECT id, created_at, title, city, distric
-        FROM places
+        FROM suggestions
         WHERE distric LIKE ? OR description LIKE ?
         ORDER BY ${recogerDatosPermitidos} ${datosOrdenados}
       `,
         [`%${buscar}%`, `%${buscar}%`]
       );
     } else {
-      [lugares] = await connection.query(
+      [sugerencias] = await connection.query(
         `
         SELECT id, created_at, title, city, distric
-        FROM places
+        FROM suggestions
         ORDER BY ${recogerDatosPermitidos} ${datosOrdenados}
         `
       );
@@ -46,8 +45,8 @@ const lugares = async (req, res, next) => {
 
     res.send({
       status: 'ok.',
-      message: 'Listado de lugares.',
-      data: lugares,
+      message: 'Listado de sugerencias de lugares.',
+      data: sugerencias,
     });
   } catch (error) {
     next(error);
@@ -56,4 +55,4 @@ const lugares = async (req, res, next) => {
   }
 };
 
-module.exports = lugares;
+module.exports = sugerencias;

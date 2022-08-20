@@ -11,10 +11,9 @@ const denunciaLugar = async (req, res, next) => {
 
     const { id } = req.params;
     const { denuncia } = req.body;
-    console.log('denuncia', denuncia);
 
     if (denuncia !== 1) {
-      generarError('La denuncia se hace con el "1"', 400);
+      generarError('La denuncia se hace con el "1".', 400);
     }
 
     const [idDenuncia] = await connection.query(
@@ -27,7 +26,7 @@ const denunciaLugar = async (req, res, next) => {
     );
 
     if (idDenuncia.length > 0) {
-      generarError('Ya denunciaste este problema', 400);
+      generarError('Ya denunciaste este problema.', 400);
     }
 
     await connection.query(
@@ -53,7 +52,7 @@ const denunciaLugar = async (req, res, next) => {
     `);
 
     res.send({
-      status: 'ok',
+      status: 'ok.',
       message: 'Denuncia realizada.',
       denuncias: {
         ...numDenunciasLugar[0],

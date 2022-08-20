@@ -1,9 +1,10 @@
 'use strict';
 
 const getDB = require('../../db/db');
-const { generarError, guardarFoto } = require('../../helpers');
 
-const fotoAvatar = async (req, res, next) => {
+const { guardarFoto, generarError } = require('../../helpers');
+
+const fotoSugerencia = async (req, res, next) => {
   let connection;
 
   try {
@@ -11,17 +12,20 @@ const fotoAvatar = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const [avatarUsuario] = await connection.query(
+    const [imagenId] = await connection.query(
       `
             SELECT id
-            FROM users_avatar
-            WHERE user_id = ?
+            FROM suggestions_photos
+            WHERE suggestion_id = ?
         `,
       [id]
     );
 
-    if (avatarUsuario.length > 0) {
-      generarError('Solo puedes tener una imagen de tu avatar.', 403);
+    if (imagenId.length >= 3) {
+      generarError(
+        'No puedes añadir más fotos a esta sugerencia, a no ser que borres alguna.',
+        403
+      );
     }
 
     let fotoGuardada;
@@ -31,16 +35,16 @@ const fotoAvatar = async (req, res, next) => {
 
       await connection.query(
         `
-                INSERT INTO users_avatar (uploadDate, photo, user_id)
-                VALUES (CURRENT_TIMESTAMP, ?, ?)
-            `,
+            INSERT INTO suggestions_photos (uploadDate, photo, suggestion_id)
+            VALUES (CURRENT_TIMESTAMP,?,?)
+           `,
         [fotoGuardada, id]
       );
     }
 
     res.send({
       status: 'ok.',
-      message: 'Imagen avatar añadida.',
+      message: 'Imagen guardada.',
       data: {
         photo: fotoGuardada,
       },
@@ -52,4 +56,4 @@ const fotoAvatar = async (req, res, next) => {
   }
 };
 
-module.exports = fotoAvatar;
+module.exports = fotoSugerencia;

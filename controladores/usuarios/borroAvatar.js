@@ -21,7 +21,7 @@ const borroAvatar = async (req, res, next) => {
     );
 
     if (avatar.length === 0) {
-      generarError('La imagen del avatar no existe', 404);
+      generarError('La imagen del avatar no existe.', 404);
     }
 
     await borrarFoto(avatar[0].photo);
@@ -36,7 +36,7 @@ const borroAvatar = async (req, res, next) => {
     );
 
     res.send({
-      status: 'ok',
+      status: 'ok.',
       message: 'Imagen avatar borrada.',
     });
   } catch (error) {

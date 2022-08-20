@@ -26,11 +26,11 @@ const loginUsuario = async (req, res, next) => {
     );
 
     if (usuario.length === 0) {
-      generarError('Email o password no correctos', 401);
+      generarError('Email o password no correctos.', 401);
     }
 
     if (!usuario[0].active) {
-      generarError('Usuario pendiente de validación, revise su correo', 401);
+      generarError('Usuario pendiente de validación, revise su correo.', 401);
     }
 
     const info = {
@@ -41,7 +41,7 @@ const loginUsuario = async (req, res, next) => {
     const token = jwt.sign(info, process.env.JWT_SECRET, { expiresIn: '1d' });
 
     res.send({
-      status: 'ok',
+      status: 'ok.',
       data: {
         token,
       },

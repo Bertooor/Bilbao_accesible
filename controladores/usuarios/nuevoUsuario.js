@@ -29,7 +29,7 @@ const nuevoUsuario = async (req, res, next) => {
     );
 
     if (existeUsuario.length > 0) {
-      generarError('Ya existe un usuario con este email', 409);
+      generarError('Ya existe un usuario con este email.', 409);
     }
 
     const registrationCode = generarCodigoRandom(40);
@@ -41,7 +41,7 @@ const nuevoUsuario = async (req, res, next) => {
 
     enviarMail({
       to: email,
-      subject: 'Correo de activación de usuario',
+      subject: 'Correo de activación de usuario.',
       body: bodyEmail,
     });
 
@@ -54,7 +54,7 @@ const nuevoUsuario = async (req, res, next) => {
     );
 
     res.status(201).send({
-      status: 'ok',
+      status: 'ok.',
       message: 'Usuario creado, comprueba tu correo para validar tu cuenta.',
     });
   } catch (error) {

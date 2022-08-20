@@ -13,7 +13,7 @@ const esAdmin = async (req, res, next) => {
     const { authorization } = req.headers;
 
     if (!authorization) {
-      generarError('Falta la cabecera de authorization', 401);
+      generarError('Falta la cabecera de authorization.', 401);
     }
 
     let tokenInfo;
@@ -21,7 +21,7 @@ const esAdmin = async (req, res, next) => {
     try {
       tokenInfo = jwt.verify(authorization, process.env.JWT_SECRET);
     } catch (error) {
-      generarError('Token no valido', 401);
+      generarError('Token no valido.', 401);
     }
 
     const [usuario] = await connection.query(
@@ -38,7 +38,7 @@ const esAdmin = async (req, res, next) => {
 
     if (idUsuario !== 1 || roleUsuario !== 'admin') {
       generarError(
-        'Lo siento no tienes permisos para este tipo de acción',
+        'Lo siento no tienes permisos para este tipo de acción.',
         401
       );
     }
