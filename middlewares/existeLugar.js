@@ -19,8 +19,6 @@ const existeLugar = async (req, res, next) => {
       [id]
     );
 
-    console.log(idLugar, id);
-
     if (idLugar.length === 0) {
       generarError('Lugar no encontrado.', 404);
     }

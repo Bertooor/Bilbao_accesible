@@ -10,7 +10,6 @@ const usuarioAutorizado = async (req, res, next) => {
     connection = await getDB();
 
     const { authorization } = req.headers;
-    console.log('authorization', authorization);
 
     if (!authorization) {
       generarError('Falta la cabecera de authorization.', 401);
@@ -22,7 +21,7 @@ const usuarioAutorizado = async (req, res, next) => {
     } catch (error) {
       generarError('Token no valido', 401);
     }
-    console.log('tokenInfo', tokenInfo);
+
     const [usuario] = await connection.query(
       `
       SELECT lastAuthUpdate
@@ -31,12 +30,9 @@ const usuarioAutorizado = async (req, res, next) => {
     `,
       [tokenInfo.id]
     );
-    console.log('user', usuario);
+
     const lastAuthUpdate = usuario[0].lastAuthUpdate;
     const ultimaCreacionToken = tokenInfo.iat;
-
-    console.log('last', Date.parse(lastAuthUpdate) / 1000);
-    console.log('time', ultimaCreacionToken);
 
     if (ultimaCreacionToken < Date.parse(lastAuthUpdate) / 1000) {
       generarError('Token caducado.', 401);
