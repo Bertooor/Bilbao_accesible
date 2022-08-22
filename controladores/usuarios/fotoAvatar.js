@@ -20,6 +20,8 @@ const fotoAvatar = async (req, res, next) => {
       [id]
     );
 
+    //Si no existe ninguna imagen de avatar en la base de datos, se añade a la base de datos y al directorio de las imágenes.
+
     if (avatarUsuario.length > 0) {
       generarError('Solo puedes tener una imagen de tu avatar.', 403);
     }
@@ -42,7 +44,7 @@ const fotoAvatar = async (req, res, next) => {
       status: 'ok.',
       message: 'Imagen avatar añadida.',
       data: {
-        photo: fotoGuardada,
+        imagen: fotoGuardada,
       },
     });
   } catch (error) {

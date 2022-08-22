@@ -42,7 +42,7 @@ const nuevaSugerencia = async (req, res, next) => {
 
     res.send({
       status: 'ok.',
-      message: 'Nuevo sugerencia añadida.',
+      message: 'Nueva sugerencia añadida.',
       data: {
         id: insertId,
       },

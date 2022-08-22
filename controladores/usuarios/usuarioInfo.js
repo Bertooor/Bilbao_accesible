@@ -12,7 +12,7 @@ const usuarioInfo = async (req, res, next) => {
 
     const [usuario] = await connection.query(
       `
-      SELECT id, created_at, email, name, avatar
+      SELECT id, created_at AS fecha_registro, email, name, avatar
       FROM users
       WHERE id = ?
     `,
@@ -20,14 +20,14 @@ const usuarioInfo = async (req, res, next) => {
     );
 
     const usuarioInf = {
-      name: usuario[0].name,
+      nombre: usuario[0].name,
       avatar: usuario[0].avatar,
     };
 
     if (req.userAuth.id === usuario[0].id || req.userAuth.role === 'admin') {
       usuarioInf.id = usuario[0].id;
       usuarioInf.email = usuario[0].email;
-      usuarioInf.date = usuario[0].created_at;
+      usuarioInf.fecha_registro = usuario[0].fecha_registro;
     }
 
     res.send({

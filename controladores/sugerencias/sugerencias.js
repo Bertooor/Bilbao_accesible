@@ -26,7 +26,7 @@ const sugerencias = async (req, res, next) => {
     if (buscar) {
       [sugerencias] = await connection.query(
         `
-        SELECT id, created_at, title, city, distric
+        SELECT id, created_at AS fecha, title AS título, city AS ciudad, distric AS barrio
         FROM suggestions
         WHERE distric LIKE ? OR description LIKE ?
         ORDER BY ${recogerDatosPermitidos} ${datosOrdenados}
@@ -36,7 +36,7 @@ const sugerencias = async (req, res, next) => {
     } else {
       [sugerencias] = await connection.query(
         `
-        SELECT id, created_at, title, city, distric
+        SELECT id, created_at AS fecha, title AS título, city AS ciudad, distric AS barrio
         FROM suggestions
         ORDER BY ${recogerDatosPermitidos} ${datosOrdenados}
         `

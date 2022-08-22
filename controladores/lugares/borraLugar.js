@@ -21,6 +21,8 @@ const borraLugar = async (req, res, next) => {
       [id]
     );
 
+    //Borramos las imágenes del directorio de imágenes y de la base de datos junto con los datos del lugar y las denuncias.
+
     await connection.query(
       `
         DELETE

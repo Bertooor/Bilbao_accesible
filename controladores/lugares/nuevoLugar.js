@@ -27,6 +27,8 @@ const nuevoLugar = async (req, res, next) => {
 
     const { insertId } = datosLugar;
 
+    //Insertamos las imágenes en la base de datos y en el directorio de imágenes, previamente creado, con un máximo de 3 imágenes.
+
     if (req.files && Object.keys(req.files).length > 0) {
       for (const imagen of Object.values(req.files).slice(0, 3)) {
         const nombreFoto = await guardarFoto(imagen);

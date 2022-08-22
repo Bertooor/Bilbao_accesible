@@ -11,7 +11,7 @@ const sugerencia = async (req, res, next) => {
 
     const [datosSugerencia] = await connection.query(
       `
-      SELECT id, created_at, title, description, city, distric
+      SELECT id, created_at AS fecha, title AS título, description AS descripción, city AS ciudad, distric AS barrio
       FROM suggestions
       WHERE id = ?
     `,
@@ -20,7 +20,7 @@ const sugerencia = async (req, res, next) => {
 
     const [imagenes] = await connection.query(
       `
-      SELECT id, uploadDate, photo, suggestion_id
+      SELECT id, uploadDate AS fecha, photo AS imagen, suggestion_id AS sugerencia_id
       FROM suggestions_photos
       WHERE suggestion_id = ?
     `,

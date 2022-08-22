@@ -23,7 +23,10 @@ const puedeEditarSugerencia = async (req, res, next) => {
       req.userAuth.id !== idUsuario[0].user_id &&
       req.userAuth.role !== 'admin'
     ) {
-      generarError('No tienes los permisos para editar la sugerencia.', 401);
+      generarError(
+        'No tienes los permisos para ver o editar la sugerencia.',
+        401
+      );
     }
 
     next();

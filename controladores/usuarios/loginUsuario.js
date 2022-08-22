@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const getDB = require('../../db/db');
 const { validar, generarError } = require('../../helpers');
-const { registrationSchema } = require('../../schemas');
+const { loginUsuarioSchema } = require('../../schemas');
 
 const loginUsuario = async (req, res, next) => {
   let connection;
@@ -12,7 +12,7 @@ const loginUsuario = async (req, res, next) => {
   try {
     connection = await getDB();
 
-    await validar(registrationSchema, req.body);
+    await validar(loginUsuarioSchema, req.body);
 
     const { email, password } = req.body;
 

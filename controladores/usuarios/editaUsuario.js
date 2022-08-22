@@ -34,6 +34,8 @@ const editaUsuario = async (req, res, next) => {
 
     const { name, email, avatar } = req.body;
 
+    //Si el usuario cambia el mail, se comprueba que el nuevo mail no exista.
+
     if (email !== infoUsuario[0].email) {
       const [existeMail] = await connection.query(
         `
@@ -75,6 +77,8 @@ const editaUsuario = async (req, res, next) => {
         message:
           'Datos de usuario actualizados. Revisa tu email para validar los nuevos datos.',
       });
+
+      //Sino cambia el mail se editan los cambios en la base de datos.
     } else {
       await connection.query(
         `
@@ -87,7 +91,8 @@ const editaUsuario = async (req, res, next) => {
 
       res.send({
         status: 'ok.',
-        message: 'Datos de usuario actualizados.',
+        message:
+          'Datos de usuario actualizados. Vuelve a logearte para actualizar tus datos.',
       });
     }
   } catch (error) {

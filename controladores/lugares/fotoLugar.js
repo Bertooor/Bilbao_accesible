@@ -44,9 +44,9 @@ const fotoLugar = async (req, res, next) => {
 
     res.send({
       status: 'ok.',
-      message: 'Imagen guardada.',
+      message: 'Imagen añadida.',
       data: {
-        photo: fotoGuardada,
+        nombreImagen: fotoGuardada,
       },
     });
   } catch (error) {

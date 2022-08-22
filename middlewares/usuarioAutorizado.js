@@ -35,10 +35,10 @@ const usuarioAutorizado = async (req, res, next) => {
     const lastAuthUpdate = usuario[0].lastAuthUpdate;
     const ultimaCreacionToken = tokenInfo.iat;
 
-    console.log('last', lastAuthUpdate);
+    console.log('last', Date.parse(lastAuthUpdate) / 1000);
     console.log('time', ultimaCreacionToken);
 
-    if (ultimaCreacionToken < lastAuthUpdate) {
+    if (ultimaCreacionToken < Date.parse(lastAuthUpdate) / 1000) {
       generarError('Token caducado.', 401);
     }
 

@@ -7,6 +7,8 @@ const {
   enviarMail,
 } = require('../../helpers');
 
+//Esta ruta te devuelve un código por medio de un mail, que tendrás que introducir en el body de la ruta nuevaContrasena, junto con la nueva contrasena del usuario.
+
 const recuperaContrasena = async (req, res, next) => {
   let connection;
 
@@ -16,7 +18,7 @@ const recuperaContrasena = async (req, res, next) => {
     const { email } = req.body;
 
     if (!email) {
-      generarError('Faltan campos.', 400);
+      generarError('Escribe tu email, por favor.', 400);
     }
 
     const [confirmaEmail] = await connection.query(
@@ -35,14 +37,14 @@ const recuperaContrasena = async (req, res, next) => {
     const recoverCode = generarCodigoRandom(40);
 
     const emailBody = `
-            Se solicitó un cambio de contraseña para el usuario registrado con este email en Bilbao_accesible.
+      Se solicitó un cambio de contraseña para el usuario registrado con este email en Bilbao_accesible.
 
-            El código de recuperación es: ${recoverCode}.
+      El código de recuperación es: ${recoverCode}.
 
-            Si no fuiste tu el que solicitó el cambio, ignora este email y sigue con tu contraseña habitual.
+      Si no fuiste tu el que solicitó el cambio, ignora este email y sigue con tu contraseña habitual.
 
-            ¡ Gracias !
-        `;
+      ¡ Gracias !
+    `;
 
     await connection.query(
       `

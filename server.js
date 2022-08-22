@@ -93,7 +93,13 @@ app.delete(
 
 app.post('/sugerencias', usuarioAutorizado, nuevaSugerencia);
 app.get('/sugerencias', esAdmin, sugerencias);
-app.get('/sugerencias/:id', esAdmin, sugerencia);
+app.get(
+  '/sugerencias/:id',
+  usuarioAutorizado,
+  existeSugerencia,
+  puedeEditarSugerencia,
+  sugerencia
+);
 app.put(
   '/sugerencias/:id',
   usuarioAutorizado,

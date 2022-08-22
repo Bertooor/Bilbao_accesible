@@ -37,10 +37,16 @@ const usuarioSchema = Joi.object().keys({
   avatar: Joi.string().max(100),
 });
 
+const loginUsuarioSchema = Joi.object().keys({
+  email: Joi.string().required().email().max(100),
+  password: Joi.string().required().min(6).max(20),
+});
+
 module.exports = {
   registrationSchema,
   adminSchema,
   placeSchema,
   contrasenaSchema,
   usuarioSchema,
+  loginUsuarioSchema,
 };

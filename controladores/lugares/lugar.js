@@ -11,7 +11,7 @@ const lugar = async (req, res, next) => {
 
     const [datosLugar] = await connection.query(
       `
-      SELECT id, created_at, title, description, city, distric, problem_solved
+      SELECT id, created_at AS fecha, title AS título, description AS descripción, city AS ciudad, distric AS barrio, problem_solved AS problema_resuelto
       FROM places
       WHERE id = ?
     `,
@@ -20,7 +20,7 @@ const lugar = async (req, res, next) => {
 
     const [imagenes] = await connection.query(
       `
-      SELECT id, uploadDate, photo, place_id
+      SELECT id, uploadDate AS fecha, photo AS imagen, place_id AS id_lugar
       FROM places_photos
       WHERE place_id = ?
     `,

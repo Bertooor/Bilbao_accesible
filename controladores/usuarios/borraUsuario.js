@@ -28,6 +28,8 @@ const borraUsuario = async (req, res, next) => {
       [id]
     );
 
+    //Elimino el usuario de la base de datos y el avatar del directorio de las imagenes, en caso de existir.
+
     if (avatar && avatar.length > 0) {
       await borrarFoto(avatar[0].photo);
     }
