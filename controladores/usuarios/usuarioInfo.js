@@ -1,6 +1,7 @@
 'use strict';
 
 const getDB = require('../../db/db');
+const { generarError } = require('../../helpers');
 
 const usuarioInfo = async (req, res, next) => {
   let connection;
@@ -12,29 +13,44 @@ const usuarioInfo = async (req, res, next) => {
 
     const [usuario] = await connection.query(
       `
-      SELECT id, created_at AS fecha_registro, email, name, avatar
+      SELECT id, created_at AS fecha_registro, email, avatar
       FROM users
       WHERE id = ?
     `,
       [id]
     );
 
+    // const [imagen] = await connection.query(
+    //   `
+    //   SELECT photo, id
+    //   FROM users_avatar
+    //   WHERE user_id = ?
+    // `,
+    //   [id]
+    // );
+
+    if (req.userAuth.id !== usuario[0].id && req.userAuth.role !== 'admin') {
+      generarError('No dispones de permisos para esta acción', 403);
+    }
+
     const usuarioInf = {
-      nombre: usuario[0].name,
       avatar: usuario[0].avatar,
+      id: usuario[0].id,
+      email: usuario[0].email,
+      fecha_registro: usuario[0].fecha_registro,
     };
 
-    if (req.userAuth.id === usuario[0].id || req.userAuth.role === 'admin') {
-      usuarioInf.id = usuario[0].id;
-      usuarioInf.email = usuario[0].email;
-      usuarioInf.fecha_registro = usuario[0].fecha_registro;
-    }
+    // const imagenInf = {
+    //   imagen: imagen[0].photo,
+    //   imagen_id: imagen[0].id,
+    // };
 
     res.send({
       status: 'ok.',
       message: 'Información usuario.',
       data: {
-        usuarioInf,
+        ...usuarioInf,
+        // ...imagenInf,
       },
     });
   } catch (error) {

@@ -5,7 +5,6 @@ const { generarError } = require('../helpers');
 
 const existeUsuario = async (req, res, next) => {
   let connection;
-
   try {
     connection = await getDB();
 

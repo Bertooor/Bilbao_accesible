@@ -32,7 +32,7 @@ const editaUsuario = async (req, res, next) => {
 
     await validar(usuarioSchema, req.body);
 
-    const { name, email, avatar } = req.body;
+    const { email, avatar } = req.body;
 
     //Si el usuario cambia el mail, se comprueba que el nuevo mail no exista.
 
@@ -66,10 +66,10 @@ const editaUsuario = async (req, res, next) => {
       await connection.query(
         `
           UPDATE users
-          SET name = ?, avatar = ?, email = ?, lastAuthUpdate = ?, active = 0, registrationCode = ? 
+          SET avatar = ?, email = ?, lastAuthUpdate = ?, active = 0, registrationCode = ? 
           WHERE id = ?
         `,
-        [name, avatar, email, new Date(), registrationCode, id]
+        [avatar, email, new Date(), registrationCode, id]
       );
 
       res.send({
@@ -83,10 +83,10 @@ const editaUsuario = async (req, res, next) => {
       await connection.query(
         `
           UPDATE users
-          SET name = ?, avatar = ?, lastAuthUpdate = ?
+          SET avatar = ?, lastAuthUpdate = ?
           WHERE id = ?
         `,
-        [name, avatar, new Date(), id]
+        [avatar, new Date(), id]
       );
 
       res.send({

@@ -4,6 +4,8 @@ require('dotenv').config();
 
 const express = require('express');
 
+const cors = require('cors');
+
 const morgan = require('morgan');
 
 const path = require('path');
@@ -37,6 +39,7 @@ const {
   fotoAvatar,
   borroAvatar,
   loginAdmin,
+  usuarioAvatar,
 } = require('./controladores/usuarios/index');
 const {
   nuevaSugerencia,
@@ -64,10 +67,13 @@ app.use(express.static(path.join(__dirname, DIRECTORIO_IMAGENES)));
 
 app.use(fileUpload());
 
+app.use(cors());
+
 app.post('/usuarios', nuevoUsuario);
 app.get('/usuarios/validar/:registrationCode', usuarioValidado);
 app.post('/usuarios/login', loginUsuario);
 app.get('/usuarios/:id', existeUsuario, usuarioAutorizado, usuarioInfo);
+app.get('usuarios/:id/imagen', existeUsuario, usuarioAutorizado, usuarioAvatar);
 app.put('/usuarios/contrasena', usuarioAutorizado, editaContrasenaUsuario);
 app.delete('/usuarios/:id', existeUsuario, usuarioAutorizado, borraUsuario);
 app.put('/usuarios/:id', existeUsuario, usuarioAutorizado, editaUsuario);

@@ -3,9 +3,8 @@
 const Joi = require('joi');
 
 const registrationSchema = Joi.object().keys({
-  name: Joi.string().max(100),
   email: Joi.string().required().email().max(100),
-  avatar: Joi.string().max(50),
+  avatar: Joi.string().max(50).required(),
   password: Joi.string()
     .required()
     .min(6)
@@ -14,7 +13,6 @@ const registrationSchema = Joi.object().keys({
 });
 
 const adminSchema = Joi.object().keys({
-  name: Joi.string().required().max(100),
   email: Joi.string().required().email().max(100),
   password: Joi.string().required().min(6).max(20),
 });
@@ -32,7 +30,6 @@ const contrasenaSchema = Joi.object().keys({
 });
 
 const usuarioSchema = Joi.object().keys({
-  name: Joi.string().required().max(100),
   email: Joi.string().required().email().max(100),
   avatar: Joi.string().max(100),
 });

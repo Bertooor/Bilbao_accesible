@@ -13,7 +13,7 @@ const editaLugar = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const { title, city, distric, description } = req.body;
+    const { title, city, distric, description, problem_solved } = req.body;
 
     if (!title || !description || !city || !distric) {
       generarError('Te falta algún campo requerido por rellenar.', 400);
@@ -21,10 +21,10 @@ const editaLugar = async (req, res, next) => {
 
     await connection.query(
       `
-        UPDATE places SET title=?, city=?, distric=?, description=? 
+        UPDATE places SET title=?, city=?, distric=?, description=?, problem_solved=?
         WHERE id=?
     `,
-      [title, city, distric, description, id]
+      [title, city, distric, description, problem_solved, id]
     );
 
     res.send({
@@ -36,6 +36,7 @@ const editaLugar = async (req, res, next) => {
         description,
         city,
         distric,
+        problem_solved,
       },
     });
   } catch (error) {

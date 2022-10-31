@@ -14,7 +14,7 @@ const lugar = async (req, res, next) => {
       SELECT id, created_at AS fecha, title AS título, description AS descripción, city AS ciudad, distric AS barrio, problem_solved AS problema_resuelto
       FROM places
       WHERE id = ?
-    `,
+      `,
       [id]
     );
 
@@ -23,32 +23,26 @@ const lugar = async (req, res, next) => {
       SELECT id, uploadDate AS fecha, photo AS imagen, place_id AS id_lugar
       FROM places_photos
       WHERE place_id = ?
-    `,
+      `,
       [id]
     );
 
     const [numDenunciasLugar] = await connection.query(
       `
-            SELECT count(complaint) AS denuncias_lugar
-            FROM places_complaints
-            WHERE place_id = ?
+      SELECT count(id) AS denuncias_lugar
+      FROM places_complaints
+      WHERE place_id = ?
       `,
       [id]
     );
-
-    const [totalDenuncias] = await connection.query(`
-      SELECT count(id) AS denuncias_totales
-      FROM places_complaints
-    `);
 
     res.send({
       status: 'ok.',
       message: 'Detalles del lugar.',
       data: {
         ...datosLugar[0],
-        imagenes,
         ...numDenunciasLugar[0],
-        ...totalDenuncias[0],
+        imagenes,
       },
     });
   } catch (error) {

@@ -19,14 +19,15 @@ const nuevoLugar = async (req, res, next) => {
 
     const [datosLugar] = await connection.query(
       `
-        INSERT INTO places ( title, city, distric, description, user_id)
-        VALUES (?,?,?,?,?);
-    `,
+      INSERT INTO places ( title, city, distric, description, user_id)
+      VALUES (?,?,?,?,?);
+      `,
       [title, city, distric, description, 1]
     );
 
     const { insertId } = datosLugar;
-
+    console.log('insertId', insertId);
+    console.log('datosLugar', datosLugar);
     //Insertamos las imágenes en la base de datos y en el directorio de imágenes, previamente creado, con un máximo de 3 imágenes.
 
     if (req.files && Object.keys(req.files).length > 0) {
@@ -34,9 +35,9 @@ const nuevoLugar = async (req, res, next) => {
         const nombreFoto = await guardarFoto(imagen);
         await connection.query(
           `
-                INSERT INTO places_photos(uploadDate, photo, place_id)
-                VALUES(CURRENT_TIMESTAMP,?,?);
-            `,
+          INSERT INTO places_photos(uploadDate, photo, place_id)
+          VALUES(CURRENT_TIMESTAMP,?,?);
+          `,
           [nombreFoto, insertId]
         );
       }

@@ -31,15 +31,15 @@ const denunciaLugar = async (req, res, next) => {
 
     await connection.query(
       `
-            INSERT INTO places_complaints (created_at, complaint, place_id, user_id)
-            VALUES (CURRENT_TIMESTAMP,?,?,?)
+            INSERT INTO places_complaints (created_at, place_id, user_id)
+            VALUES (CURRENT_TIMESTAMP,?,?)
         `,
-      [denuncia, id, req.userAuth.id]
+      [id, req.userAuth.id]
     );
 
     const [numDenunciasLugar] = await connection.query(
       `
-            SELECT count(complaint) AS denuncias_lugar
+            SELECT count(id) AS denuncias_lugar
             FROM places_complaints
             WHERE place_id = ?
       `,

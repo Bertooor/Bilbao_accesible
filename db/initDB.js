@@ -14,7 +14,7 @@ async function main() {
     await connection.query(`DROP TABLE IF EXISTS places_complaints;`);
     await connection.query(`DROP TABLE IF EXISTS places_photos;`);
     await connection.query(`DROP TABLE IF EXISTS places;`);
-    await connection.query(`DROP TABLE IF EXISTS users_avatar`);
+    await connection.query(`DROP TABLE IF EXISTS users_avatar;`);
     await connection.query(`DROP TABLE IF EXISTS users;`);
 
     console.log('Creando las tablas...');
@@ -24,7 +24,6 @@ async function main() {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         email VARCHAR(100) UNIQUE NOT NULL,
         password VARCHAR(512) NOT NULL,
-        name VARCHAR(100),
         avatar VARCHAR(50),
         active BOOLEAN DEFAULT false,
         role ENUM("admin", "normal") DEFAULT "normal" NOT NULL,
@@ -54,6 +53,8 @@ async function main() {
         city VARCHAR(100) NOT NULL,
         distric VARCHAR(100) NOT NULL,
         problem_solved BOOLEAN DEFAULT false,
+        place_id INT,
+        FOREIGN KEY(place_id) REFERENCES places(id),
         user_id INT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
       )
@@ -63,8 +64,8 @@ async function main() {
       CREATE TABLE places_photos (
         id INT PRIMARY KEY AUTO_INCREMENT,
         uploadDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-        photo VARCHAR(100) NOT NULL,
-        place_id INT NOT NULL,
+        photo VARCHAR(100),
+        place_id INT,
         FOREIGN KEY(place_id) REFERENCES places(id)
       )
     `);
@@ -73,11 +74,10 @@ async function main() {
       CREATE TABLE places_complaints (
         id INT PRIMARY KEY AUTO_INCREMENT, 
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        complaint TINYINT NOT NULL, 
-        place_id INT NOT NULL,
+        complaint INT,
+        place_id INT,
         FOREIGN KEY(place_id) REFERENCES places(id),
-        CONSTRAINT places_complaints_CK1 CHECK (complaint=1),
-        user_id INT NOT NULL,
+        user_id INT,
         FOREIGN KEY (user_id) REFERENCES users(id)
         -- CONSTRAINT uc_user_place UNIQUE (user_id , place_id)
       )
@@ -108,7 +108,7 @@ async function main() {
 
     console.log('Creo usuario admin...');
     await connection.query(`
-        INSERT INTO users(created_at, email, password, name, active, role)
+        INSERT INTO users(created_at, email, password, avatar, active, role)
         VALUES(
             CURRENT_TIMESTAMP,
             'albertoleandro37@gmail.com',

@@ -12,15 +12,15 @@ const loginAdmin = async (req, res, next) => {
 
     await validar(adminSchema, req.body);
 
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
 
     const [admin] = await connection.query(
       `
             SELECT id, role
             FROM users
-            WHERE name = ? AND email = ? AND password = SHA2(?, 512)
+            WHERE email = ? AND password = SHA2(?, 512)
         `,
-      [name, email, password]
+      [email, password]
     );
 
     if (admin.length === 0) {

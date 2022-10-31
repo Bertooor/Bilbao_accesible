@@ -12,6 +12,7 @@ const nuevaContrasena = require('./nuevaContrasena');
 const fotoAvatar = require('./fotoAvatar');
 const borroAvatar = require('./borroAvatar');
 const loginAdmin = require('./loginAdmin');
+const usuarioAvatar = require('./usuarioAvatar');
 
 module.exports = {
   nuevoUsuario,
@@ -26,4 +27,5 @@ module.exports = {
   fotoAvatar,
   borroAvatar,
   loginAdmin,
+  usuarioAvatar,
 };
