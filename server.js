@@ -73,7 +73,12 @@ app.post('/usuarios', nuevoUsuario);
 app.get('/usuarios/validar/:registrationCode', usuarioValidado);
 app.post('/usuarios/login', loginUsuario);
 app.get('/usuarios/:id', existeUsuario, usuarioAutorizado, usuarioInfo);
-app.get('usuarios/:id/imagen', existeUsuario, usuarioAutorizado, usuarioAvatar);
+app.get(
+  '/usuarios/:id/imagen',
+  existeUsuario,
+  usuarioAutorizado,
+  usuarioAvatar
+);
 app.put('/usuarios/contrasena', usuarioAutorizado, editaContrasenaUsuario);
 app.delete('/usuarios/:id', existeUsuario, usuarioAutorizado, borraUsuario);
 app.put('/usuarios/:id', existeUsuario, usuarioAutorizado, editaUsuario);

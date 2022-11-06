@@ -37,7 +37,8 @@ const borroAvatar = async (req, res, next) => {
 
     res.send({
       status: 'ok.',
-      message: 'Imagen avatar borrada.',
+      message:
+        'Imagen avatar borrada. Vuelve a logearte para actualizar tus datos.',
     });
   } catch (error) {
     next(error);

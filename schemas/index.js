@@ -22,6 +22,7 @@ const placeSchema = Joi.object().keys({
   city: Joi.string().required().max(100),
   distric: Joi.string().required().max(100),
   description: Joi.string().required(),
+  problem_solved: Joi.string().optional(),
 });
 
 const contrasenaSchema = Joi.object().keys({

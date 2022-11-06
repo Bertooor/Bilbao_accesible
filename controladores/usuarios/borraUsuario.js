@@ -19,6 +19,15 @@ const borraUsuario = async (req, res, next) => {
       generarError('No tienes permisos para eliminar a este usuario.', 401);
     }
 
+    await connection.query(
+      `
+      DELETE
+      FROM places_complaints
+      WHERE user_id = ?
+    `,
+      [id]
+    );
+
     const [avatar] = await connection.query(
       `
       SELECT photo

@@ -42,7 +42,8 @@ const fotoAvatar = async (req, res, next) => {
 
     res.send({
       status: 'ok.',
-      message: 'Imagen avatar añadida.',
+      message:
+        'Imagen avatar añadida. Vuelve a logearte para actualizar tus datos.',
       data: {
         imagen: fotoGuardada,
       },
