@@ -11,3 +11,10 @@
 - Los usuarios logueados podrán denunciar(a través de un voto), los problemas que consideren deberían ser resueltos.
   Solo prodrán tener una imagen como avatar.
   Además podrán proponer nuevos problemas de accesibilidad que serán añadidos a la lista de problemas, después de ser revisados y aprobados por el administrador.
+
+- Para utilizar esta API, puedes clonar el repositorio.
+  npm i => para instalar las dependencias.
+  npm run dev => para arrancar el servidor con nodemon.
+
+- Además tienes un front creado con REACT para visualizar como funciona en:
+  https://github.com/Bertooor/Bilbao_accesible_front
